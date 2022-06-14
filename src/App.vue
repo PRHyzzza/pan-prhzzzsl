@@ -1,7 +1,10 @@
 <script setup lang="ts">
+import SparkMD5 from 'spark-md5';
 // https://github.com/vueuse/head
 // you can use this to manipulate the document head in any components,
 // they will be rendered correctly in the html results with vite-ssg
+console.log(SparkMD5.hash('hello world'));
+
 useHead({
   title: 'pan',
   meta: [

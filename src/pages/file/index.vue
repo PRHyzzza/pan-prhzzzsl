@@ -31,12 +31,6 @@ async function onChange() {
     const r = await axios.post('http://localhost:8081/public/chunk', formData);
     console.log(r);
   });
-  axios.defaults.headers.common['Content-Type'] = 'multipart/form-data'
-  const formData = new FormData()
-  formData.append('file', upload.value!.files[0])
-  axios.post('http://localhost:8081/public/upload', formData).then(r => {
-    console.log(r);
-  });
 }
 function clickUpload() {
   const input = document.querySelector<HTMLInputElement>('input[type="file"]')

@@ -142,4 +142,10 @@ export default defineConfig({
       inline: ['@vue', '@vueuse', 'vue-demi'],
     },
   },
+
+  server: {
+    port: 3333,
+    open: true,
+    host: '0.0.0.0'
+  },
 })

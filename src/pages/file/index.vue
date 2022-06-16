@@ -52,7 +52,7 @@ function onUpload() {
       }
     }
     requestList.value.push(fn);
-    if(requestList.value.length === chunksSize.value) {
+    if (requestList.value.length === chunksSize.value) {
       startRequest();
     }
   });
@@ -94,16 +94,17 @@ function fileToBuffer(file: File) {
 </script>
  
 <template>
-  <div flex flex-col gap-10px w-20em m-auto>
-    <div @click="clickUpload" btn cursor-pointer flex flex-row justify-center items-center gap-5px>
-      <div i-carbon:cloud-upload /><span>上传</span>
-    </div>
-    <div h-6px w-full rounded="4px" bg="#e7e7e9">
-      <div h-full w-0 rounded="3px" bg="#6cb6ff" transition-300 transition-ease :style="`width:${progressWidth}px`">
+  <div flex flex-col gap-10px m-auto max-w-360px>
+    <div @click="clickUpload" btn w-100px>
+      <div flex items-center justify-center gap-5px>
+        <div i-carbon:cloud-upload /><span>上传</span>
       </div>
     </div>
-    <div>
-      <span>{{ percent === 100 ? '上传进度' : '上传成功' }}</span>
+    <div flex flex-row items-center justify-center gap-10px>
+      <div h-6px w-320px rounded="4px" bg="#e7e7e9">
+        <div h-full w-0 rounded="3px" bg="#6cb6ff" transition-300 transition-ease :style="`width:${progressWidth}px`">
+        </div>
+      </div>
       <span>{{ percent }}%</span>
     </div>
   </div>

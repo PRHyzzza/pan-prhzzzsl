@@ -6,6 +6,6 @@ button:
   toggle_dark: 切换深色模式
   toggle_langs: 切换语言
 intro:
-  aka: 也叫
-  whats-your-name: 输入你的名字
+  home:
+    title: 我是一个无趣的人
 not-found: 未找到页面

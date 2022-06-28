@@ -6,6 +6,6 @@ button:
   toggle_dark: Toggle dark mode
   toggle_langs: Change languages
 intro:
-  aka: Also known as
-  whats-your-name: What's your name?
+  home:
+    title: I'm a boring person
 not-found: Not found

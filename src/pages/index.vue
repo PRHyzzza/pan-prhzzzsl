@@ -5,7 +5,7 @@ const { t } = useI18n()
 <template>
   <div>
     <div py-20 />
-    <span>{{t('intro.home.title')}}</span>
+    <span text-xl>{{t('intro.home.title')}}</span>
   </div>
 </template>
 

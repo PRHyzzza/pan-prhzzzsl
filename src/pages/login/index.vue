@@ -4,6 +4,7 @@ const loginForm = reactive({
   username: '',
   password: '',
 })
+const code = ref()
 </script>
 
 <template>
@@ -15,13 +16,14 @@ const loginForm = reactive({
 
     <Transition>
       <div v-if="isSwitch">
-        <PanInput v-model="loginForm.username" label="用户名" mb-10px/>
+        <PanInput v-model="loginForm.username" label="用户名" mb-10px />
         <PanInput v-model="loginForm.password" label="密码" type="password" />
       </div>
       <div v-else="!isSwitch">
         register
       </div>
     </Transition>
+    <PanCode v-model="code" />
   </div>
 </template>
 

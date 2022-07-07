@@ -9,6 +9,7 @@ declare module '@vue/runtime-core' {
     Footer: typeof import('./components/Footer.vue')['default']
     PanCode: typeof import('./components/PanCode.vue')['default']
     PanInput: typeof import('./components/PanInput.vue')['default']
+    PanModal: typeof import('./components/PanModal.vue')['default']
     README: typeof import('./components/README.md')['default']
     Record: typeof import('./components/Record.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

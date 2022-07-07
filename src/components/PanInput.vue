@@ -2,8 +2,7 @@
 withDefaults(defineProps<{
   placeholder?: string,
   modelValue?: number | string,
-  label?: string,
-  type?: string,
+  type?: 'text' | 'password',
 }>(), {
   placeholder: '',
   type: 'text',
@@ -16,9 +15,9 @@ function input(event: Event) {
 </script>
 
 <template>
-  <div flex flex-row gap-10px items-center w-330px>
-    <span v-if="label" w-60px text-start>{{ label }}</span>
-    <input autocomplete="false" p="x4 y2" input :placeholder="placeholder" :value="modelValue" @input="input($event)" :type="type" />
+  <div flex flex-row gap-10px items-center>
+    <input autocomplete="false" p="x4 y2" input :placeholder="placeholder" :value="modelValue" @input="input($event)"
+      :type="type" />
   </div>
 
 </template>

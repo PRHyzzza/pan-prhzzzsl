@@ -16,14 +16,14 @@ const code = ref()
 
     <Transition>
       <div v-if="isSwitch">
-        <PanInput v-model="loginForm.username" label="用户名" mb-10px />
-        <PanInput v-model="loginForm.password" label="密码" type="password" />
+        <PanInput v-model="loginForm.username" mb-10px />
+        <PanInput v-model="loginForm.password" type="password" />
       </div>
       <div v-else="!isSwitch">
         register
       </div>
     </Transition>
-    <PanCode v-model="code" />
+    <PanCode v-model="code" :code-num="4"/>
   </div>
 </template>
 

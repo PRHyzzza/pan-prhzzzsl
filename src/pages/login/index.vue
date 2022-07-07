@@ -23,7 +23,8 @@ const code = ref()
         register
       </div>
     </Transition>
-    <PanCode v-model="code" :code-num="4"/>
+    <PanCode v-model="code" :code-num="4" />
+    <PanModal :show="true"></PanModal>
   </div>
 </template>
 

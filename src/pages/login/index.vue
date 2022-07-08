@@ -29,7 +29,7 @@ const fu = (): void => {
       </div>
     </Transition>
     <PanCode v-model="code" :code-num="4" />
-    <PanModal :show="show" @handle-close="show = false" @close="fu"></PanModal>
+    <PanModal :show="show" @handle-close="show = false" @close="fu" :is-mask="true"></PanModal>
     <div btn @click="show = true">跳出</div>
   </div>
 </template>

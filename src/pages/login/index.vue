@@ -1,10 +1,15 @@
 <script setup lang="ts">
-const isSwitch = ref<Boolean>(true)
+const isSwitch = ref<boolean>(true)
+const show = ref<boolean>(false)
 const loginForm = reactive({
   username: '',
   password: '',
 })
 const code = ref()
+
+const fu = (val:boolean): void => {
+  console.log(val)
+}
 </script>
 
 <template>
@@ -24,7 +29,8 @@ const code = ref()
       </div>
     </Transition>
     <PanCode v-model="code" :code-num="4" />
-    <PanModal :show="true"></PanModal>
+    <PanModal :show="show" @handle-close="show = false" @close="fu"></PanModal>
+    <div btn @click="show = true">跳出</div>
   </div>
 </template>
 

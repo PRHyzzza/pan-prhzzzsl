@@ -14,8 +14,8 @@ const widthClass = computed(() => {
 })
 
 watch(() => props.show, (val: boolean) => {
-  val ? document.body.style.overflow = 'hidden' : document.body.style.overflow = 'auto'
-  emits('close', val)
+  val ? document.body.style.overflow = 'hidden'
+    : document.body.style.overflow = 'auto', emits('close')
 })
 
 </script>

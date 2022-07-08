@@ -7,8 +7,8 @@ const loginForm = reactive({
 })
 const code = ref()
 
-const fu = (val:boolean): void => {
-  console.log(val)
+const fu = (): void => {
+  console.log("关闭model")
 }
 </script>
 

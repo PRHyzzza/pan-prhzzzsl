@@ -14,7 +14,7 @@ const validator = new schema(props.rules)
 watch(() => props.model, (val) => {
 
 })
-VueEvent
+
 
 defineExpose({
   validatorRef,

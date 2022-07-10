@@ -31,6 +31,18 @@ const fu = (): void => {
     <PanCode v-model="code" :code-num="4" />
     <PanModal :show="show" @handle-close="show = false" @close="fu" :is-mask="true"></PanModal>
     <div btn @click="show = true">跳出</div>
+
+    <PanForm :rules="{ username: [11] }" :model="loginForm">
+      <PanFormItem lable="用户名" prop="username">
+        <PanInput v-model="loginForm.username" />
+      </PanFormItem>
+      <PanFormItem lable="密码" prop="password">
+        <PanInput v-model="loginForm.password" type="password" />
+      </PanFormItem>
+      <PanFormItem lable="验证码" prop="code">
+        <PanCode v-model="code" :code-num="4" />
+      </PanFormItem>
+    </PanForm>
   </div>
 </template>
 

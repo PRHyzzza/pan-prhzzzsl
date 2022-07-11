@@ -13,6 +13,7 @@
     "@vueuse/head": "^0.7.6",
     "async-validator": "^4.2.5",
     "axios": "^0.27.2",
+    "mitt": "^3.0.0",
     "nprogress": "^0.2.0",
     "pinia": "^2.0.14",
     "prism-theme-vars": "^0.2.3",

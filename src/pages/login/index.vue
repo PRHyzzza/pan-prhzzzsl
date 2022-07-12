@@ -32,7 +32,10 @@ const fu = (): void => {
     <PanModal :show="show" @handle-close="show = false" @close="fu" :is-mask="true"></PanModal>
     <div btn @click="show = true">跳出</div>
 
-    <PanForm :rules="{ username: [11] }" :model="loginForm">
+    <PanForm :rules="{
+      username: { required: true, message: '请输入账号' },
+      password: { required: true, message: '请输入密码' }
+    }" :model="loginForm">
       <PanFormItem lable="用户名" prop="username">
         <PanInput v-model="loginForm.username" />
       </PanFormItem>

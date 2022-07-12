@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import schema from 'async-validator'
+import Schema from "async-validator";
 const props = defineProps({
   model: Object,
   rules: {
@@ -9,13 +9,13 @@ const props = defineProps({
 })
 const validatorRef = ref<boolean>(false)
 
-const validator = new schema(props.rules)
-
-watch(() => props.model, (val) => {
-
-})
-
-
+const validator = new Schema(props.rules);
+validator.validate({ username: 'Firstname' }, (errors, fields) => {
+  if (errors) {
+    console.log(errors);
+  }
+  // validation passed
+});
 defineExpose({
   validatorRef,
 })

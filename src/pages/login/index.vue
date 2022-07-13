@@ -1,15 +1,25 @@
 <script setup lang="ts">
 const isSwitch = ref<boolean>(true)
 const show = ref<boolean>(false)
+const form = ref()
 const loginForm = reactive({
-  username: '',
-  password: '',
+  username: null,
+  password: null,
 })
 const code = ref()
 
 const fu = (): void => {
   console.log("关闭model")
 }
+
+onMounted(() => {
+  form.value.validatorRef.then((res: any) => {
+    console.log(res);
+  }).catch((err: any) => {
+    console.log(err)
+  })
+})
+
 </script>
 
 <template>
@@ -33,9 +43,9 @@ const fu = (): void => {
     <div btn @click="show = true">跳出</div>
 
     <PanForm :rules="{
-      username: { required: true, message: '请输入账号' },
-      password: { required: true, message: '请输入密码' }
-    }" :model="loginForm">
+      username: [{ required: true, message: '请输入账号' }],
+      password: [{ required: true, message: '请输入密码' }],
+    }" :model="loginForm" ref="form">
       <PanFormItem lable="用户名" prop="username">
         <PanInput v-model="loginForm.username" />
       </PanFormItem>

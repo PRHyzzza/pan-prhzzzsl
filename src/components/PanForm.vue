@@ -1,21 +1,28 @@
 <script setup lang="ts">
-import Schema from "async-validator";
-const props = defineProps({
-  model: Object,
-  rules: {
-    type: Object,
-    required: true
-  },
+import Schema, { RuleItem } from "async-validator";
+
+const props = withDefaults(defineProps<{
+  model: object,
+  rules: Record<string, RuleItem[]>,
+}>(), {
+
 })
-const validatorRef = ref<boolean>(false)
+
+provide('form', props)
 
 const validator = new Schema(props.rules);
-validator.validate({ username: 'Firstname' }, (errors, fields) => {
-  if (errors) {
-    console.log(errors);
-  }
-  // validation passed
-});
+
+const validatorRef = new Promise((resolve, reject) => {
+  validator.validate(props.model, (errors, fields) => {
+    if (errors) {
+      reject(false)
+    } else {
+      resolve(true)
+    }
+  })
+})
+
+
 defineExpose({
   validatorRef,
 })

@@ -3,8 +3,8 @@ const isSwitch = ref<boolean>(true)
 const show = ref<boolean>(false)
 const form = ref()
 const loginForm = ref({
-  username: '',
-  password: '',
+  username: '111',
+  password: '111',
   code: '',
 })
 

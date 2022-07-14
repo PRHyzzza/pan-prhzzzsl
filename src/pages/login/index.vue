@@ -7,9 +7,9 @@ const loginForm = ref({
   password: '',
   code: '',
 })
-const code = ref()
 
 const fu = (): void => {
+  // eslint-disable-next-line no-console
   console.log('关闭model')
 }
 
@@ -19,8 +19,10 @@ onMounted(() => {
 
 const v = () => {
   form.value.validatorRef().then((result: boolean) => {
+    // eslint-disable-next-line no-console
     console.log(result)
   }).catch((err: boolean) => {
+    // eslint-disable-next-line no-console
     console.log(err)
   })
 }
@@ -46,7 +48,6 @@ const v = () => {
         register
       </div>
     </Transition>
-    <PanCode v-model="code" :code-num="4" />
     <PanModal :show="show" :is-mask="true" @handle-close="show = false" @close="fu" />
     <div btn @click="show = true">
       跳出
@@ -55,7 +56,7 @@ const v = () => {
     <PanForm
       ref="form" :rules="{
         username: [{ required: true, message: '请输入账号' }],
-        password: [{ required: true, message: '请输入密码' }],
+        password: [{ required: true, message: '请输入密码' }, { min: 3, max: 5, message: 'Length should be 3 to 5', trigger: 'blur' }],
         code: [{ required: true, message: '请输入密码' }],
       }" :model="loginForm"
     >

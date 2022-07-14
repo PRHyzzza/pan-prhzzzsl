@@ -29,7 +29,7 @@ const validatorRef = () => new Promise((resolve, reject) => {
   const validator = new Schema(obj.value)
   validator.validate(props.model, (errors, fields) => {
     if (errors) {
-      console.warn(errors)
+      console.warn('validator error', errors)
       // eslint-disable-next-line prefer-promise-reject-errors
       reject(false)
     }

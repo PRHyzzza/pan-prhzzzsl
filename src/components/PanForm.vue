@@ -9,7 +9,6 @@ const props = withDefaults(defineProps<{
 })
 const { proxy } = getCurrentInstance() as any
 const fields = ref<any>([])
-const isValid = ref(false)
 const form = reactive<object>({
   formEmitter: emitter,
   ...toRefs(props),
@@ -22,12 +21,7 @@ proxy.$sub('pan.form.addField', (field: any) => {
 
 const validate = () => {
   const tasks = fields.value.map((item: { validate: () => any }) => item.validate())
-  Promise.all(tasks).then(() => {
-    isValid.value = true
-  }).catch(() => {
-    isValid.value = false
-  })
-  return isValid.value
+  return Promise.all(tasks)
 }
 
 onBeforeUnmount(() => {

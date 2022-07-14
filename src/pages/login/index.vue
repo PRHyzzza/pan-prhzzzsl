@@ -9,7 +9,6 @@ const loginForm = ref({
 })
 
 const fu = (): void => {
-  // eslint-disable-next-line no-console
   console.log('关闭model')
 }
 
@@ -18,8 +17,11 @@ onMounted(() => {
 })
 const router = useRouter()
 const v = () => {
-  if (form.value.validate())
-    router.push('/file')
+ form.value.validate().then(() => {
+   router.push('/')
+ }).catch(() => {
+   console.log('验证失败')
+ })
 }
 </script>
 
@@ -48,13 +50,11 @@ const v = () => {
       跳出
     </div>
 
-    <PanForm
-      ref="form" :rules="{
-        username: [{ required: true, message: '请输入账号' }],
-        password: [{ required: true, message: '请输入密码' }, { min: 3, max: 5, message: 'Length should be 3 to 5', trigger: 'blur' }],
-        code: [{ required: true, message: '请输入密码' }],
-      }" :model="loginForm"
-    >
+    <PanForm ref="form" :rules="{
+      username: [{ required: true, message: '请输入账号' }],
+      password: [{ required: true, message: '请输入密码' }, { min: 3, max: 5, message: 'Length should be 3 to 5', trigger: 'blur' }],
+      code: [{ required: true, message: '请输入密码' }],
+    }" :model="loginForm">
       <PanFormItem lable="用户名" prop="username">
         <PanInput v-model="loginForm.username" />
       </PanFormItem>

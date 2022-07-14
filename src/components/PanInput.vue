@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import emitter from '~/utils/emitter'
 withDefaults(defineProps<{
-  placeholder?: string,
-  modelValue?: number | string,
-  type?: 'text' | 'password',
+  placeholder?: string
+  modelValue?: number | string
+  type?: 'text' | 'password'
 }>(), {
   placeholder: '',
   type: 'text',
@@ -17,13 +17,14 @@ function input(event: Event) {
 }
 
 onMounted(() => {
-  if (inputRef.value.parentElement.className == 'form-item') {
+  if (inputRef.value.parentElement.className === 'form-item')
     parent.value = inject('form-item')
-  }
 })
 </script>
 
 <template>
-  <input ref="inputRef" autocomplete="false" p="x4 y2" input :placeholder="placeholder" :value="modelValue"
-    @input="input($event)" :type="type" @blur="input($event)" />
+  <input
+    ref="inputRef" autocomplete="false" p="x4 y2" input :placeholder="placeholder" :value="modelValue"
+    :type="type" @input="input($event)" @blur="input($event)"
+  >
 </template>

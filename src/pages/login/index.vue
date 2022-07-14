@@ -5,12 +5,12 @@ const form = ref()
 const loginForm = ref({
   username: '',
   password: '',
-  code:''
+  code: '',
 })
 const code = ref()
 
 const fu = (): void => {
-  console.log("关闭model")
+  console.log('关闭model')
 }
 
 onMounted(() => {
@@ -19,19 +19,22 @@ onMounted(() => {
 
 const v = () => {
   form.value.validatorRef().then((result: boolean) => {
-    console.log(result);
+    console.log(result)
   }).catch((err: boolean) => {
-    console.log(err);
-  }); 
+    console.log(err)
+  })
 }
-
 </script>
 
 <template>
   <div flex flex-col gap-20px justify-center items-center>
     <div flex flex-row gap-20px justify-center items-center>
-      <div @click="isSwitch = true" btn>登录</div>
-      <div @click="isSwitch = false" btn>注册</div>
+      <div btn @click="isSwitch = true">
+        登录
+      </div>
+      <div btn @click="isSwitch = false">
+        注册
+      </div>
     </div>
 
     <Transition>
@@ -39,19 +42,23 @@ const v = () => {
         <PanInput v-model="loginForm.username" mb-10px />
         <PanInput v-model="loginForm.password" type="password" />
       </div>
-      <div v-else="!isSwitch">
+      <div v-else>
         register
       </div>
     </Transition>
     <PanCode v-model="code" :code-num="4" />
-    <PanModal :show="show" @handle-close="show = false" @close="fu" :is-mask="true"></PanModal>
-    <div btn @click="show = true">跳出</div>
+    <PanModal :show="show" :is-mask="true" @handle-close="show = false" @close="fu" />
+    <div btn @click="show = true">
+      跳出
+    </div>
 
-    <PanForm :rules="{
-      username: [{ required: true, message: '请输入账号' }],
-      password: [{ required: true, message: '请输入密码' }],
-      code: [{ required: true, message: '请输入密码' }]
-    }" :model="loginForm" ref="form">
+    <PanForm
+      ref="form" :rules="{
+        username: [{ required: true, message: '请输入账号' }],
+        password: [{ required: true, message: '请输入密码' }],
+        code: [{ required: true, message: '请输入密码' }],
+      }" :model="loginForm"
+    >
       <PanFormItem lable="用户名" prop="username">
         <PanInput v-model="loginForm.username" />
       </PanFormItem>
@@ -62,7 +69,9 @@ const v = () => {
         <PanCode v-model="loginForm.code" :code-num="4" />
       </PanFormItem>
       <PanFormItem>
-        <div btn @click="v">aaa</div>
+        <div btn @click="v">
+          aaa
+        </div>
       </PanFormItem>
     </PanForm>
   </div>

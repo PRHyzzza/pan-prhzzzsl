@@ -1,19 +1,20 @@
 <script setup lang="ts">
-import Schema, { RuleItem } from "async-validator";
+import type { RuleItem } from 'async-validator'
+import Schema from 'async-validator'
 import emitter from '~/utils/emitter'
 const props = withDefaults(defineProps<{
-  model: object,
-  rules: Record<string, RuleItem[]>,
+  model: object
+  rules: Record<string, RuleItem[]>
 }>(), {
 
 })
 const fields = ref<string[]>([])
 provide('form', props)
 emitter.on('fields', (val) => {
-  if (!val) return
+  if (!val)
+    return
   fields.value.push(val)
 })
-
 
 const validatorRef = () => new Promise((resolve, reject) => {
   // 从props.model的keys与fields比较
@@ -23,12 +24,16 @@ const validatorRef = () => new Promise((resolve, reject) => {
   diff.forEach((item: string) => {
     obj.value[item] = props.rules[item]
   })
-  if (!obj.value) return
-  const validator = new Schema(obj.value);
+  if (!obj.value)
+    return
+  const validator = new Schema(obj.value)
   validator.validate(props.model, (errors, fields) => {
     if (errors) {
+      console.warn(errors)
+      // eslint-disable-next-line prefer-promise-reject-errors
       reject(false)
-    } else {
+    }
+    else {
       resolve(true)
     }
     emitter.emit('validateAll')
@@ -41,6 +46,6 @@ defineExpose({
 
 <template>
   <div>
-    <slot></slot>
+    <slot />
   </div>
 </template>

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 const props = withDefaults(defineProps<{
-  show: boolean,
-  width?: string,
-  isMask?: boolean,
+  show: boolean
+  width?: string
+  isMask?: boolean
 }>(), {
   show: false,
   width: '35%',
@@ -16,33 +16,35 @@ const widthClass = computed(() => {
 })
 
 const handleMask = (): void => {
-  if (props.isMask) {
+  if (props.isMask)
     emits('handleClose')
-  }
 }
 
 watch(() => props.show, (val: boolean) => {
-  val ? document.body.style.overflow = 'hidden'
+  val
+    ? document.body.style.overflow = 'hidden'
     : document.body.style.overflow = 'auto'
-  if (!val) {
+  if (!val)
     emits('close')
-  }
 })
-
 </script>
 
 <template>
   <Teleport to="body">
     <Transition name="modal">
-      <div v-if="show" top-0 bottom-0 left-0 right-0 fixed hfull wfull transition-opacity duration-500 flex
-        justify-center items-center bg="#000 opacity-50" @click="handleMask">
-        <div :style="widthClass" flex flex-col gap-10px bg="white dark:#242424" dark:text-gray-100 min-w-300px min-h-20
-          rounded transition-all duration-500 shadow p="x30px y20px">
+      <div
+        v-if="show" top-0 bottom-0 left-0 right-0 fixed hfull wfull transition-opacity duration-500 flex
+        justify-center items-center bg="#000 opacity-50" @click="handleMask"
+      >
+        <div
+          :style="widthClass" flex flex-col gap-10px bg="white dark:#242424" dark:text-gray-100 min-w-300px min-h-20
+          rounded transition-all duration-500 shadow p="x30px y20px"
+        >
           <div font-medium flex flex-row justify-between items-center>
             <slot name="header">
               header
             </slot>
-            <div @click="$emit('handleClose')" i-carbon-close icon-btn text-2xl />
+            <div i-carbon-close icon-btn text-2xl @click="$emit('handleClose')" />
           </div>
           <main>
             <slot name="content">

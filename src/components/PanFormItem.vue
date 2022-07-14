@@ -2,37 +2,40 @@
 import Schema, { Rules } from 'async-validator';
 import emitter from '~/utils/emitter'
 const props = withDefaults(defineProps<{
-  lable: string,
-  prop: string
+  lable?: string,
+  prop?: string | undefined
 }>(), {
 
 })
-emitter.emit('formItem', props.prop)
-
 const parent: any = inject('form')
 const errorMessage = ref();
+provide('form-item', props.prop)
+emitter.emit('fields', props.prop)
 
 emitter.on('validate', (val) => {
-  console.log(val);
-  
+  if (props.prop !== val) {
+    return
+  }
   const { model, rules } = parent
-
-  rules[val].map((item: Rules) => {
+  rules[val]?.map((item: Rules) => {
     const schema = new Schema({ [val]: item })
     schema.validate({ [val]: model[val] }, (errors, fields) => {
-      if (errors) {
-        errorMessage.value = errors[0].message
-      } else {
-        errorMessage.value = ''
-      }
+      errors ? errorMessage.value = errors[0].message : errorMessage.value = ''
     })
   })
 })
 
+emitter.on('validateAll', () => {
+  emitter.emit('validate', props.prop)
+})
+
+onBeforeUnmount(() => {
+  emitter.off('validate')
+})
 </script>
 
 <template>
-  <div flex flex-row items-center mb-6>
+  <div class="form-item" flex flex-row items-center mb-6>
     <span v-if="lable" w-80px text-start>{{ lable }}</span>
     <slot></slot>
     <span v-if="errorMessage">{{ errorMessage }}</span>

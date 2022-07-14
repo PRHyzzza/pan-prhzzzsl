@@ -9,18 +9,21 @@ withDefaults(defineProps<{
   type: 'text',
 })
 const emits = defineEmits(['update:modelValue'])
-const parent: any = inject('propVal')
-
+const inputRef = ref()
+const parent = ref()
 function input(event: Event) {
   emits('update:modelValue', (event.target as HTMLInputElement).value)
-  emitter.emit('validate', parent.prop)
+  emitter.emit('validate', parent.value)
 }
+
+onMounted(() => {
+  if (inputRef.value.parentElement.className == 'form-item') {
+    parent.value = inject('form-item')
+  }
+})
 </script>
 
 <template>
-  <div flex flex-row gap-10px items-center>
-    <input autocomplete="false" p="x4 y2" input :placeholder="placeholder" :value="modelValue" @input="input($event)"
-      :type="type" @blur="emitter.emit('validate', parent.prop)" />
-  </div>
-
+  <input ref="inputRef" autocomplete="false" p="x4 y2" input :placeholder="placeholder" :value="modelValue"
+    @input="input($event)" :type="type" @blur="input($event)" />
 </template>

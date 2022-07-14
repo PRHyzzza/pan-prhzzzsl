@@ -2,9 +2,10 @@
 const isSwitch = ref<boolean>(true)
 const show = ref<boolean>(false)
 const form = ref()
-const loginForm = reactive({
-  username: null,
-  password: null,
+const loginForm = ref({
+  username: '',
+  password: '',
+  code:''
 })
 const code = ref()
 
@@ -13,12 +14,16 @@ const fu = (): void => {
 }
 
 onMounted(() => {
-  form.value.validatorRef.then((res: any) => {
-    console.log(res);
-  }).catch((err: any) => {
-    console.log(err)
-  })
+
 })
+
+const v = () => {
+  form.value.validatorRef().then((result: boolean) => {
+    console.log(result);
+  }).catch((err: boolean) => {
+    console.log(err);
+  }); 
+}
 
 </script>
 
@@ -45,6 +50,7 @@ onMounted(() => {
     <PanForm :rules="{
       username: [{ required: true, message: '请输入账号' }],
       password: [{ required: true, message: '请输入密码' }],
+      code: [{ required: true, message: '请输入密码' }]
     }" :model="loginForm" ref="form">
       <PanFormItem lable="用户名" prop="username">
         <PanInput v-model="loginForm.username" />
@@ -52,8 +58,11 @@ onMounted(() => {
       <PanFormItem lable="密码" prop="password">
         <PanInput v-model="loginForm.password" type="password" />
       </PanFormItem>
-      <PanFormItem lable="验证码" prop="code">
-        <PanCode v-model="code" :code-num="4" />
+      <PanFormItem lable="验证码">
+        <PanCode v-model="loginForm.code" :code-num="4" />
+      </PanFormItem>
+      <PanFormItem>
+        <div btn @click="v">aaa</div>
       </PanFormItem>
     </PanForm>
   </div>

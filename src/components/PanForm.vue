@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { RuleItem } from 'async-validator'
-import Schema from 'async-validator'
 import emitter from '~/utils/emitter'
 const props = withDefaults(defineProps<{
   model: object
@@ -8,39 +7,35 @@ const props = withDefaults(defineProps<{
 }>(), {
 
 })
-const fields = ref<string[]>([])
-provide('form', props)
-emitter.on('fields', (val) => {
-  if (!val)
-    return
-  fields.value.push(val)
+const { proxy } = getCurrentInstance() as any
+const fields = ref<any>([])
+const isValid = ref(false)
+const form = reactive<object>({
+  formEmitter: emitter,
+  ...toRefs(props),
+})
+provide('form', form)
+
+proxy.$sub('pan.form.addField', (field: any) => {
+  field && fields.value.push(field[0])
 })
 
-const validatorRef = () => new Promise((resolve, reject) => {
-  // 从props.model的keys与fields比较
-  const keys = Object.keys(props.model)
-  const diff: string[] = keys.filter(item => fields.value.includes(item))
-  const obj = ref<Record<string, RuleItem[]>>({})
-  diff.forEach((item: string) => {
-    obj.value[item] = props.rules[item]
+const validate = () => {
+  const tasks = fields.value.map((item: { validate: () => any }) => item.validate())
+  Promise.all(tasks).then(() => {
+    isValid.value = true
+  }).catch(() => {
+    isValid.value = false
   })
-  if (!obj.value)
-    return
-  const validator = new Schema(obj.value)
-  validator.validate(props.model, (errors, fields) => {
-    if (errors) {
-      console.warn('validator error', errors)
-      // eslint-disable-next-line prefer-promise-reject-errors
-      reject(false)
-    }
-    else {
-      resolve(true)
-    }
-    emitter.emit('validateAll')
-  })
+  return isValid.value
+}
+
+onBeforeUnmount(() => {
+  proxy.$unsub('pan.form.addField')
 })
+
 defineExpose({
-  validatorRef,
+  validate,
 })
 </script>
 

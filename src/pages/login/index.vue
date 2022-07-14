@@ -18,13 +18,7 @@ onMounted(() => {
 })
 
 const v = () => {
-  form.value.validatorRef().then((result: boolean) => {
-    // eslint-disable-next-line no-console
-    console.log(result)
-  }).catch((err: boolean) => {
-    // eslint-disable-next-line no-console
-    console.log(err)
-  })
+  form.value.validate()
 }
 </script>
 

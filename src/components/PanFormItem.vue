@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { Rules } from 'async-validator'
 import Schema from 'async-validator'
 import emitter from '~/utils/emitter'
 const props = withDefaults(defineProps<{
@@ -8,30 +7,42 @@ const props = withDefaults(defineProps<{
 }>(), {
 
 })
-const parent: any = inject('form')
+const form: any = inject('form')
 const errorMessage = ref()
-provide('form-item', props.prop)
-emitter.emit('fields', props.prop)
-
-emitter.on('validate', (val) => {
-  if (props.prop !== val)
+const { proxy } = getCurrentInstance() as any
+const validate = () => {
+  if (!props.prop)
     return
-
-  const { model, rules } = parent
-  rules[val]?.forEach((item: Rules) => {
-    const schema = new Schema({ [val]: item })
-    schema.validate({ [val]: model[val] }, (errors, fields) => {
-      errors ? errorMessage.value = errors[0].message : errorMessage.value = ''
-    })
+  const rules = form.rules[props.prop]
+  const value = form.model[props.prop]
+  const validator = new Schema({ [props.prop]: rules })
+  return validator.validate({ [props.prop]: value }, (errors) => {
+    // errors存在则校验失败
+    if (errors) {
+      errorMessage.value = errors[0].message
+    }
+    else {
+      // 校验通过
+      errorMessage.value = ''
+    }
   })
-})
+}
 
-emitter.on('validateAll', () => {
-  emitter.emit('validate', props.prop)
+const formItem = reactive({
+  ...toRefs(props),
+  formItemEmitter: emitter,
+  validate,
+})
+provide('formItem', formItem)
+
+onMounted(() => {
+  proxy.$sub(`pan.form.item.validate${props.prop}`, validate)
+  if (props.prop)
+    proxy.$pub('pan.form.addField', formItem)
 })
 
 onBeforeUnmount(() => {
-  emitter.off('validate')
+  proxy.$unsub(`pan.form.item.validate${props.prop}`)
 })
 </script>
 

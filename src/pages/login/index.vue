@@ -16,9 +16,10 @@ const fu = (): void => {
 onMounted(() => {
 
 })
-
+const router = useRouter()
 const v = () => {
-  form.value.validate()
+  if (form.value.validate())
+    router.push('/file')
 }
 </script>
 

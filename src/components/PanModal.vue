@@ -38,7 +38,7 @@ watch(() => props.show, (val: boolean) => {
       >
         <div
           :style="widthClass" flex flex-col gap-10px bg="white dark:#242424" dark:text-gray-100 min-w-300px min-h-20
-          rounded transition-all duration-500 shadow p="x30px y20px"
+          rounded transition-all duration-500 shadow p="x30px y20px" @click.stop
         >
           <div font-medium flex flex-row justify-between items-center>
             <slot name="header">

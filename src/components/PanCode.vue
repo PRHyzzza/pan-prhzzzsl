@@ -34,8 +34,8 @@ const deleteInput = (index: any) => {
 <template>
   <div ref="panCode" flex flex-row justify-center items-center gap-2>
     <input
-      v-for="item in codeNum" :key="item" v-model="code[item - 1]" type="text" maxlength="1"
-      text-center input p-4px w-8 h-8 @input="enterInput(item)" @keyup.delete="deleteInput(item)"
+      v-for="item in codeNum" :key="item" v-model="code[item - 1]" type="text" maxlength="1" text-center input
+      p-4px w-8 h-8 @input="enterInput(item)" @keyup.delete="deleteInput(item)"
     >
   </div>
 </template>

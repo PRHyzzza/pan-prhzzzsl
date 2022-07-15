@@ -9,6 +9,7 @@ useHead({
     },
   ],
 })
+console.log()
 </script>
 
 <template>

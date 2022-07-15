@@ -1,7 +1,6 @@
 <script setup lang="ts">
 const isSwitch = ref<boolean>(true)
 const show = ref<boolean>(false)
-const form = ref()
 const loginForm = ref({
   username: '111',
   password: '111',
@@ -15,14 +14,6 @@ const fu = (): void => {
 onMounted(() => {
 
 })
-const router = useRouter()
-const v = () => {
- form.value.validate().then(() => {
-   router.push('/')
- }).catch(() => {
-   console.log('验证失败')
- })
-}
 </script>
 
 <template>
@@ -49,27 +40,6 @@ const v = () => {
     <div btn @click="show = true">
       跳出
     </div>
-
-    <PanForm ref="form" :rules="{
-      username: [{ required: true, message: '请输入账号' }],
-      password: [{ required: true, message: '请输入密码' }, { min: 3, max: 5, message: 'Length should be 3 to 5', trigger: 'blur' }],
-      code: [{ required: true, message: '请输入密码' }],
-    }" :model="loginForm">
-      <PanFormItem lable="用户名" prop="username">
-        <PanInput v-model="loginForm.username" />
-      </PanFormItem>
-      <PanFormItem lable="密码" prop="password">
-        <PanInput v-model="loginForm.password" type="password" />
-      </PanFormItem>
-      <PanFormItem lable="验证码">
-        <PanCode v-model="loginForm.code" :code-num="4" />
-      </PanFormItem>
-      <PanFormItem>
-        <div btn @click="v">
-          aaa
-        </div>
-      </PanFormItem>
-    </PanForm>
   </div>
 </template>
 

@@ -1,23 +1,25 @@
 <script setup lang="ts">
-withDefaults(defineProps<{
+const props = withDefaults(defineProps<{
   placeholder?: string
   modelValue?: number | string
   type?: 'text' | 'password'
+  form?: boolean
 }>(), {
   placeholder: '',
   type: 'text',
+  form: false,
 })
 const emits = defineEmits(['update:modelValue'])
-const inputRef = ref()
 const formItem: any = ref()
 const { proxy } = getCurrentInstance() as any
 function input(event: Event) {
   emits('update:modelValue', (event.target as HTMLInputElement).value)
-  proxy.$pub(`pan.form.item.validate${formItem.value.prop}`)
+  if (props.form)
+    proxy.$pub(`pan.form.item.validate${formItem.value.prop}`)
 }
 
 onMounted(() => {
-  if ((inputRef.value.parentElement.className) === 'form-item')
+  if (props.form)
     formItem.value = inject('formItem')
 })
 </script>

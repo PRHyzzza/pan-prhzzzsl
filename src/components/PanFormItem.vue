@@ -47,10 +47,14 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="form-item" flex flex-row items-center mb-6>
-    <span v-if="lable" w-80px text-start>{{ lable }}</span>
-    <slot />
-    <span v-if="errorMessage">{{ errorMessage }}</span>
+  <div flex flex-col mb-1 justify-start>
+    <div flex flex-row items-center mb-1>
+      <span v-if="props.prop" text-red-400 mr-2>*</span>
+      <span v-if="lable" w-70px text-start>{{ lable }}</span>
+      <slot />
+    </div>
+    <span v-if="errorMessage" text="red-400 sm start" pl-22>{{ errorMessage }}</span>
+    <div v-else h="1.25rem" w-1 />
   </div>
 </template>
 

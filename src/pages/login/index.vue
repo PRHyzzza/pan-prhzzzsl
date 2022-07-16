@@ -7,6 +7,22 @@ const loginForm = ref({
   code: '',
 })
 
+const loginRules = {
+  username: [
+    { required: true, message: '请输入用户名' },
+    { min: 3, message: '用户名最少3位' },
+    { max: 10, message: '用户名最多10位' },
+  ],
+  password: [
+    { required: true, message: '请输入密码' },
+    { min: 3, message: '密码最少3位' },
+    { max: 10, message: '密码最多10位' },
+  ],
+  code: [
+    { required: true, message: '请输入验证码' },
+  ],
+}
+
 const fu = (): void => {
   console.log('关闭model')
 }
@@ -29,8 +45,17 @@ onMounted(() => {
 
     <Transition>
       <div v-if="isSwitch">
-        <PanInput v-model="loginForm.username" mb-10px />
-        <PanInput v-model="loginForm.password" type="password" />
+        <PanForm :model="loginForm" :rules="loginRules">
+          <PanFormItem lable="用户名" prop="username">
+            <PanInput v-model="loginForm.username" form placeholder="请输入用户名" />
+          </PanFormItem>
+          <PanFormItem lable="密码" prop="password">
+            <PanInput v-model="loginForm.password" form placeholder="请输入密码" />
+          </PanFormItem>
+          <PanFormItem lable="验证码" prop="code">
+            <PanCode v-model="loginForm.code" form :code-num="4" />
+          </PanFormItem>
+        </PanForm>
       </div>
       <div v-else>
         register

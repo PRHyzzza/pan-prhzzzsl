@@ -11,8 +11,7 @@ onMounted(() => {
 onUpdated(() => {
   document.querySelectorAll('rect').forEach((rect: SVGRectElement) => {
     // 添加hover事件
-    rect.addEventListener('mouseenter', (e) => {
-      // `${rect.getAttribute('data-date')}的活跃度为${rect.getAttribute('data-count')}`
+    rect.addEventListener('mouseenter', () => {
       const tooltip = document.createElement('div')
       tooltip.className = 'tooltip'
       tooltip.innerHTML = `${rect.getAttribute('data-date')}的活跃度为${rect.getAttribute('data-count')}`
@@ -28,7 +27,7 @@ onUpdated(() => {
           },
         ],
       })
-      rect.addEventListener('mouseleave', (e) => {
+      rect.addEventListener('mouseleave', () => {
         if (tooltip)
           tooltip.remove()
       })

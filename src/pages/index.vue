@@ -5,7 +5,9 @@ const { t } = useI18n()
 <template>
   <div>
     <span text-xl>{{ t('intro.home.title') }}</span>
-    <RouterLink to="/login">login</RouterLink>
+    <RouterLink to="/login">
+      login
+    </RouterLink>
   </div>
 </template>
 

@@ -9,6 +9,7 @@
     "preview-https": "serve dist"
   },
   "dependencies": {
+    "@popperjs/core": "^2.11.5",
     "@vueuse/core": "^8.9.2",
     "@vueuse/head": "^0.7.6",
     "async-validator": "^4.2.5",

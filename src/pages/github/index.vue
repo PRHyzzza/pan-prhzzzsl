@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { createPopper } from '@popperjs/core'
 const dom = ref(null)
-const res = await http('public/contributions')
+const res = await axios('public/contributions')
 dom.value = res.data.data
 onMounted(() => {
   document.querySelectorAll('rect').forEach((rect: SVGRectElement) => {

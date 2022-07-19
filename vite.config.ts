@@ -1,5 +1,5 @@
 import path from 'path'
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import Vue from '@vitejs/plugin-vue'
 import Pages from 'vite-plugin-pages'
 import generateSitemap from 'vite-ssg-sitemap'
@@ -15,106 +15,117 @@ import Unocss from 'unocss/vite'
 
 const markdownWrapperClasses = 'prose prose-sm m-auto text-left'
 
-export default defineConfig({
-  resolve: {
-    alias: {
-      '~/': `${path.resolve(__dirname, 'src')}/`,
+export default defineConfig(({ command, mode }) => {
+  // 根据当前工作目录中的 `mode` 加载 .env 文件
+  // 设置第三个参数为 '' 来加载所有环境变量，而不管是否有 `VITE_` 前缀。
+  const env = loadEnv(mode, process.cwd(), '')
+  return {
+    // vite 配置
+    define: {
+      __APP_ENV__: env.APP_ENV
     },
-  },
 
-  plugins: [
-    Vue({
-      include: [/\.vue$/, /\.md$/],
-      reactivityTransform: true,
-    }),
-
-    // https://github.com/hannoeru/vite-plugin-pages
-    Pages({
-      extensions: ['vue', 'md'],
-    }),
-
-    // https://github.com/JohnCampionJr/vite-plugin-vue-layouts
-    Layouts(),
-
-    // https://github.com/antfu/unplugin-auto-import
-    AutoImport({
-      imports: [
-        'vue',
-        'vue-router',
-        'vue-i18n',
-        'vue/macros',
-        '@vueuse/head',
-        '@vueuse/core',
-      ],
-      dts: 'src/auto-imports.d.ts',
-      dirs: [
-        'src/composables',
-        'src/store',
-      ],
-      vueTemplate: true,
-    }),
-
-    // https://github.com/antfu/unplugin-vue-components
-    Components({
-      // allow auto load markdown components under `./src/components/`
-      extensions: ['vue', 'md'],
-      // allow auto import and register components used in markdown
-      include: [/\.vue$/, /\.vue\?vue/, /\.md$/],
-      dts: 'src/components.d.ts',
-    }),
-
-    // https://github.com/antfu/unocss
-    // see unocss.config.ts for config
-    Unocss(),
-
-    // https://github.com/antfu/vite-plugin-vue-markdown
-    // Don't need this? Try vitesse-lite: https://github.com/antfu/vitesse-lite
-    Markdown({
-      wrapperClasses: markdownWrapperClasses,
-      headEnabled: true,
-      markdownItSetup(md) {
-        // https://prismjs.com/
-        md.use(Prism)
-        md.use(LinkAttributes, {
-          matcher: (link: string) => /^https?:\/\//.test(link),
-          attrs: {
-            target: '_blank',
-            rel: 'noopener',
-          },
-        })
+    resolve: {
+      alias: {
+        '~/': `${path.resolve(__dirname, 'src')}/`,
       },
-    }),
-
-    // https://github.com/intlify/bundle-tools/tree/main/packages/vite-plugin-vue-i18n
-    VueI18n({
-      runtimeOnly: true,
-      compositionOnly: true,
-      include: [path.resolve(__dirname, 'locales/**')],
-    }),
-
-    // https://github.com/antfu/vite-plugin-inspect
-    // Visit http://localhost:3333/__inspect/ to see the inspector
-    Inspect(),
-  ],
-
-  // https://github.com/vitest-dev/vitest
-  test: {
-    include: ['test/**/*.test.ts'],
-    environment: 'jsdom',
-    deps: {
-      inline: ['@vue', '@vueuse', 'vue-demi'],
     },
-  },
-
-  // https://github.com/antfu/vite-ssg
-  ssgOptions: {
-    script: 'async',
-    formatting: 'minify',
-    onFinished() { generateSitemap() },
-  },
-
-  ssr: {
-    // TODO: workaround until they support native ESM
-    noExternal: ['workbox-window', /vue-i18n/],
-  },
+  
+    plugins: [
+      Vue({
+        include: [/\.vue$/, /\.md$/],
+        reactivityTransform: true,
+      }),
+  
+      // https://github.com/hannoeru/vite-plugin-pages
+      Pages({
+        extensions: ['vue', 'md'],
+      }),
+  
+      // https://github.com/JohnCampionJr/vite-plugin-vue-layouts
+      Layouts(),
+  
+      // https://github.com/antfu/unplugin-auto-import
+      AutoImport({
+        imports: [
+          'vue',
+          'vue-router',
+          'vue-i18n',
+          'vue/macros',
+          '@vueuse/head',
+          '@vueuse/core',
+        ],
+        dts: 'src/auto-imports.d.ts',
+        dirs: [
+          'src/composables',
+          'src/store',
+        ],
+        vueTemplate: true,
+      }),
+  
+      // https://github.com/antfu/unplugin-vue-components
+      Components({
+        // allow auto load markdown components under `./src/components/`
+        extensions: ['vue', 'md'],
+        // allow auto import and register components used in markdown
+        include: [/\.vue$/, /\.vue\?vue/, /\.md$/],
+        dts: 'src/components.d.ts',
+      }),
+  
+      // https://github.com/antfu/unocss
+      // see unocss.config.ts for config
+      Unocss(),
+  
+      // https://github.com/antfu/vite-plugin-vue-markdown
+      // Don't need this? Try vitesse-lite: https://github.com/antfu/vitesse-lite
+      Markdown({
+        wrapperClasses: markdownWrapperClasses,
+        headEnabled: true,
+        markdownItSetup(md) {
+          // https://prismjs.com/
+          md.use(Prism)
+          md.use(LinkAttributes, {
+            matcher: (link: string) => /^https?:\/\//.test(link),
+            attrs: {
+              target: '_blank',
+              rel: 'noopener',
+            },
+          })
+        },
+      }),
+  
+      // https://github.com/intlify/bundle-tools/tree/main/packages/vite-plugin-vue-i18n
+      VueI18n({
+        runtimeOnly: true,
+        compositionOnly: true,
+        include: [path.resolve(__dirname, 'locales/**')],
+      }),
+  
+      // https://github.com/antfu/vite-plugin-inspect
+      // Visit http://localhost:3333/__inspect/ to see the inspector
+      Inspect(),
+    ],
+  
+    // https://github.com/vitest-dev/vitest
+    test: {
+      include: ['test/**/*.test.ts'],
+      environment: 'jsdom',
+      deps: {
+        inline: ['@vue', '@vueuse', 'vue-demi'],
+      },
+    },
+  
+    // https://github.com/antfu/vite-ssg
+    ssgOptions: {
+      script: 'async',
+      formatting: 'minify',
+      onFinished() { generateSitemap() },
+    },
+  
+    ssr: {
+      // TODO: workaround until they support native ESM
+      noExternal: ['workbox-window', /vue-i18n/],
+    },
+  }
 })
+

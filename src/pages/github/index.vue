@@ -1,14 +1,10 @@
 <script setup lang="ts">
-import axios from 'axios'
 import { createPopper } from '@popperjs/core'
+const { proxy } = getCurrentInstance() as any
 const dom = ref(null)
-axios('http://localhost:8081/public/contributions').then((res) => {
-  dom.value = res.data.data
-})
+const res = await proxy.$http('public/contributions')
+dom.value = res.data.data
 onMounted(() => {
-  console.log(dom.value)
-})
-onUpdated(() => {
   document.querySelectorAll('rect').forEach((rect: SVGRectElement) => {
     // 添加hover事件
     rect.addEventListener('mouseenter', () => {

@@ -53,12 +53,13 @@ export default defineConfig(({ command, mode }) => {
           'vue-i18n',
           'vue/macros',
           '@vueuse/head',
-          '@vueuse/core',
+          '@vueuse/core'
         ],
         dts: 'src/auto-imports.d.ts',
         dirs: [
           'src/composables',
           'src/store',
+          'src/utils',
         ],
         vueTemplate: true,
       }),

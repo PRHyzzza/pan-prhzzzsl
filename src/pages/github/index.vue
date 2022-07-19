@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { createPopper } from '@popperjs/core'
-const { proxy } = getCurrentInstance() as any
 const dom = ref(null)
-const res = await proxy.$http('public/contributions')
+const res = await http('public/contributions')
 dom.value = res.data.data
 onMounted(() => {
   document.querySelectorAll('rect').forEach((rect: SVGRectElement) => {

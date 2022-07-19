@@ -53,7 +53,12 @@ export default defineConfig(({ command, mode }) => {
           'vue-i18n',
           'vue/macros',
           '@vueuse/head',
-          '@vueuse/core'
+          '@vueuse/core',
+          {
+            axios: [
+              ['default', 'axios']
+            ]
+          }
         ],
         dts: 'src/auto-imports.d.ts',
         dirs: [

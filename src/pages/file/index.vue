@@ -41,8 +41,8 @@ function onUpload() {
       const formData = new FormData()
       formData.append('file', chunk.chunk)
       formData.append('name', chunk.name)
-      http.defaults.headers.common['Content-Type'] = 'multipart/form-data'
-      const res: any = await http.post('http://localhost:8081/public/chunk', formData)
+      axios.defaults.headers.common['Content-Type'] = 'multipart/form-data'
+      const res: any = await axios.post('http://localhost:8081/public/chunk', formData)
       if (res.data.code === 1) {
         percentCount.value += 1
         percent.value = Math.floor((percentCount.value / chunksSize.value) * 100)
@@ -60,7 +60,7 @@ async function startRequest() {
   if (percentCount.value + 1 === chunksSize.value) {
     percent.value = 100
     progressWidth.value = 100 * 3.2
-    http.post('http://localhost:8081/public/merge', {
+    axios.post('http://localhost:8081/public/merge', {
       hash: md5.value,
       name: `${md5.value}.${suffix.value}`,
     })

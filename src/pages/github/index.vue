@@ -36,30 +36,30 @@ onMounted(() => {
   <div v-html="dom" />
 </template>
 
-<style>
+<style scoped>
 .ContributionCalendar {
   outline: 1px solid rgba(27, 31, 35, 0.06);
   outline-offset: -1px;
 }
 
 .ContributionCalendar-day[data-level="0"] {
-  fill: #ebedf0;
+  fill: #eff6ff;
 }
 
 .ContributionCalendar-day[data-level="1"] {
-  fill: #9be9a8;
+  fill: #bfdbfe;
 }
 
 .ContributionCalendar-day[data-level="2"] {
-  fill: #40c463;
+  fill: #60a5fa;
 }
 
 .ContributionCalendar-day[data-level="3"] {
-  fill: #30a14e;
+  fill: #2563eb;
 }
 
 .ContributionCalendar-day[data-level="4"] {
-  fill: #216e39;
+  fill: #1e3a8a;
 }
 
 .ContributionCalendar-label {

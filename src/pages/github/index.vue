@@ -4,20 +4,21 @@ const dom = ref(null)
 const res = await axios('public/contributions')
 dom.value = res.data.data
 onMounted(() => {
-  document.querySelectorAll('rect').forEach((rect: SVGRectElement) => {
+  const rectDom: NodeListOf<SVGRectElement> = document.querySelectorAll('rect')
+  rectDom.forEach((rect: SVGRectElement, index: number) => {
     // 添加hover事件
     rect.addEventListener('mouseenter', () => {
       const tooltip = document.createElement('div')
-      tooltip.className = 'tooltip'
+      tooltip.className = index < 10 ? 'tooltip top-start' : index > rectDom.length - 10 ? 'tooltip top-end' : 'tooltip top'
       tooltip.innerHTML = `${rect.getAttribute('data-date')}的活跃度为${rect.getAttribute('data-count')}`
       document.body.appendChild(tooltip)
       createPopper(rect, tooltip, {
-        placement: 'top',
+        placement: index < 10 ? 'top-start' : index > rectDom.length - 10 ? 'top-end' : 'top',
         modifiers: [
           {
             name: 'offset',
             options: {
-              offset: [0, 8],
+              offset: index < 10 ? [-20, 8] : index > rectDom.length - 10 ? [20, 8] : [0, 8],
             },
           },
         ],
@@ -79,20 +80,31 @@ onMounted(() => {
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
   pointer-events: none;
   transition: all 0.3s all;
-  padding: 4px 8px;
+  padding: 5px 10px;
 }
 
 /* 下方三角形 */
 .tooltip::before {
   content: "";
   position: absolute;
-  bottom: -8px;
-  left: 50%;
+  bottom: -5px;
   transform: translateX(-50%);
   width: 0;
   height: 0;
-  border-left: 8px solid transparent;
-  border-right: 8px solid transparent;
-  border-top: 8px solid #000;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid #000;
+}
+
+.tooltip.top-start::before {
+  left: 17%;
+}
+
+.tooltip.top-end::before {
+  left: 83%;
+}
+
+.tooltip.top::before {
+  left: 50%;
 }
 </style>

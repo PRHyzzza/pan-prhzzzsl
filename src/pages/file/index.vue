@@ -18,7 +18,7 @@ const requestList = ref<Function[]>([])
 const chunksSize = ref<number>(0)
 const progressWidth = ref<number>(0)
 async function onChange() {
-  const buffer: any = await fileToBuffer(upload.value!.files[0])
+  const buffer = await fileToBuffer(upload.value!.files[0]) as ArrayBuffer
   const chunkSize = chunkSizeRef.value
   suffix.value = upload.value!.files[0].name.split('.').pop()
   const spark = new SparkMD5.ArrayBuffer()

@@ -6,7 +6,7 @@ const {
   getSuffix,
   getSpark,
   getChunksNumber,
-  chunkSize,
+  getChunks,
 } = useSliceUpload()
 const upload = ref<myFIle>()
 const percent = ref(0)
@@ -26,15 +26,8 @@ async function startUpload(file: File) {
   const md5 = getSpark(buffer)
   const chunksNumber = getChunksNumber(buffer)
   total.value += chunksNumber
-  const chunks: chunksType[] = []
-  for (let i = 0; i < buffer.byteLength; i += chunkSize.value) {
-    chunks.push({
-      chunk: file.slice(i, i + chunkSize.value),
-      name: `${md5}-${i / chunkSize.value}.${suffix}`,
-    })
-    if (chunks.length === chunksNumber)
-      onUpload(chunks, md5, suffix)
-  }
+  const chunks: chunksType[] = getChunks(buffer, file, md5, suffix)
+  onUpload(chunks, md5, suffix)
 }
 
 function onUpload(chunks: chunksType[], md5: string, suffix: string) {

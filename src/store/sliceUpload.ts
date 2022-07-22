@@ -1,10 +1,13 @@
 import SparkMD5 from 'spark-md5'
+import type { chunksType } from '~/type/upload'
 
 export const useSliceUpload = (size?: number) => {
   // 设置上传切片的大小
   const chunkSize = ref(size || 1024 * 1024)
   // 实例化一个spark-md5对象
   const spark = new SparkMD5.ArrayBuffer()
+  // 切片数组
+  const chunks: chunksType[] = []
   // 文件转换为buffer
   const fileToBuffer = (file: File): Promise<unknown> => {
     return new Promise((resolve, reject) => {
@@ -31,11 +34,22 @@ export const useSliceUpload = (size?: number) => {
     return Math.ceil(buffer.byteLength / chunkSize.value)
   }
 
+  const getChunks = (buffer: ArrayBuffer, file: File, md5: String, suffix: String) => {
+    chunks.length = 0
+    for (let i = 0; i < buffer.byteLength; i += chunkSize.value) {
+      chunks.push({
+        chunk: file.slice(i, i + chunkSize.value),
+        name: `${md5}-${i / chunkSize.value}.${suffix}`,
+      })
+    }
+    return chunks
+  }
+
   return {
     fileToBuffer,
     getSuffix,
     getSpark,
     getChunksNumber,
-    chunkSize,
+    getChunks,
   }
 }

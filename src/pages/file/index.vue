@@ -1,71 +1,72 @@
 <script setup lang="ts">
-interface myFIle {
-  files: File[]
-}
-interface chunksType {
-  chunk: Blob
-  name: string
-}
-const sliceUpload = useSliceUpload()
-const upload = ref<myFIle>()
-const percent = ref<Number>(0)
-const percentCount = ref(0)
-const chunks = ref<any>([])
-const md5 = ref<string>()
-const suffix = ref<string>()
-const requestList = ref<Function[]>([])
-const chunksNumber = ref<number>(0)
-const progressWidth = ref<number>(0)
-async function onChange() {
-  const buffer = await sliceUpload.fileToBuffer(upload.value!.files[0]) as ArrayBuffer
-  const chunkSize = sliceUpload.chunkSize.value
-  suffix.value = sliceUpload.getSuffix(upload.value!.files[0])
-  md5.value = sliceUpload.getSpark(buffer)
-  chunksNumber.value = sliceUpload.getChunksNumber(buffer)
-  for (let i = 0; i < buffer.byteLength; i += chunkSize) {
-    chunks.value.push({
-      chunk: upload.value!.files[0].slice(i, i + chunkSize),
-      name: `${md5.value}-${i / chunkSize}.${suffix.value}`,
-    })
-    if (chunks.value.length === chunksNumber.value)
-      onUpload()
-  }
-}
+import type { chunksType, myFIle } from '~/type/upload'
 
-function onUpload() {
-  chunks.value.forEach((chunk: chunksType, index: Number) => {
-    const fn = async () => {
-      const formData = new FormData()
-      formData.append('file', chunk.chunk)
-      formData.append('name', chunk.name)
-      axios.defaults.headers.common['Content-Type'] = 'multipart/form-data'
-      const res: any = await axios.post('http://localhost:8081/public/chunk', formData)
-      if (res.data.code === 1) {
-        percentCount.value += 1
-        percent.value = Math.floor((percentCount.value / chunksNumber.value) * 100)
-        chunks.value.splice(index, 1)
-        progressWidth.value += 100 / chunksNumber.value * 3.2
-      }
-    }
-    requestList.value.push(fn)
-    if (requestList.value.length === chunksNumber.value)
-      startRequest()
+const {
+  fileToBuffer,
+  getSuffix,
+  getSpark,
+  getChunksNumber,
+  chunkSize,
+} = useSliceUpload()
+const upload = ref<myFIle>()
+const percent = ref(0)
+const percentCount = ref(0)
+const progressWidth = ref(0)
+const total = ref(0)
+async function onChange() {
+  const files = Array.from(upload.value!.files)
+  files.forEach((file: File) => {
+    startUpload(file)
   })
 }
 
-async function startRequest() {
-  if (percentCount.value + 1 === chunksNumber.value) {
-    percent.value = 100
-    progressWidth.value = 100 * 3.2
-    axios.post('http://localhost:8081/public/merge', {
-      hash: md5.value,
-      name: `${md5.value}.${suffix.value}`,
+async function startUpload(file: File) {
+  const buffer = await fileToBuffer(file) as ArrayBuffer
+  const suffix = getSuffix(file)
+  const md5 = getSpark(buffer)
+  const chunksNumber = getChunksNumber(buffer)
+  total.value += chunksNumber
+  const chunks: chunksType[] = []
+  for (let i = 0; i < buffer.byteLength; i += chunkSize.value) {
+    chunks.push({
+      chunk: file.slice(i, i + chunkSize.value),
+      name: `${md5}-${i / chunkSize.value}.${suffix}`,
     })
-    return
+    if (chunks.length === chunksNumber)
+      onUpload(chunks, md5, suffix)
   }
-  await requestList.value[percentCount.value]()
-  if (percentCount.value !== chunksNumber.value)
-    startRequest()
+}
+
+function onUpload(chunks: chunksType[], md5: string, suffix: string) {
+  const requestList: (() => any)[] = []
+  chunks.forEach((item: chunksType, index: Number) => {
+    const fn = async () => {
+      const formData = new FormData()
+      formData.append('file', item.chunk)
+      formData.append('name', item.name)
+      const res: any = await chunkFile(formData)
+      if (res.data.code === 1) {
+        percentCount.value += 1
+        percent.value = Math.floor((percentCount.value / total.value) * 100)
+        chunks.splice(index as number, 1)
+        progressWidth.value += 100 / total.value * 3.2
+      }
+    }
+    requestList.push(fn)
+  })
+  startRequest(requestList, md5, suffix)
+}
+
+async function startRequest(requestList: (() => any)[], md5: string, suffix: string) {
+  requestList.forEach(async (fn: () => any, index: number) => {
+    await fn()
+    if (index === requestList.length - 1) {
+      mergeFile({
+        hash: md5,
+        name: `${md5}.${suffix}`,
+      })
+    }
+  })
 }
 
 function clickUpload() {
@@ -88,5 +89,5 @@ function clickUpload() {
       <span>{{ percent }}%</span>
     </div>
   </div>
-  <input ref="upload" type="file" hidden @change="onChange">
+  <input ref="upload" type="file" hidden multiple @change="onChange">
 </template>

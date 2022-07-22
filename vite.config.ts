@@ -66,6 +66,7 @@ export default defineConfig(({ command, mode }) => {
           'src/composables',
           'src/store',
           'src/utils',
+          'src/api'
         ],
         vueTemplate: true,
       }),

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import SparkMD5 from 'spark-md5'
 interface myFIle {
   files: File[]
 }
@@ -7,30 +6,28 @@ interface chunksType {
   chunk: Blob
   name: string
 }
+const sliceUpload = useSliceUpload()
 const upload = ref<myFIle>()
-const chunkSizeRef = ref(2 * 1024 * 1024)
 const percent = ref<Number>(0)
 const percentCount = ref(0)
 const chunks = ref<any>([])
 const md5 = ref<string>()
 const suffix = ref<string>()
 const requestList = ref<Function[]>([])
-const chunksSize = ref<number>(0)
+const chunksNumber = ref<number>(0)
 const progressWidth = ref<number>(0)
 async function onChange() {
-  const buffer = await fileToBuffer(upload.value!.files[0]) as ArrayBuffer
-  const chunkSize = chunkSizeRef.value
-  suffix.value = upload.value!.files[0].name.split('.').pop()
-  const spark = new SparkMD5.ArrayBuffer()
-  spark.append(buffer)
-  md5.value = spark.end()
-  chunksSize.value = Math.ceil(buffer.byteLength / chunkSize)
+  const buffer = await sliceUpload.fileToBuffer(upload.value!.files[0]) as ArrayBuffer
+  const chunkSize = sliceUpload.chunkSize.value
+  suffix.value = sliceUpload.getSuffix(upload.value!.files[0])
+  md5.value = sliceUpload.getSpark(buffer)
+  chunksNumber.value = sliceUpload.getChunksNumber(buffer)
   for (let i = 0; i < buffer.byteLength; i += chunkSize) {
     chunks.value.push({
       chunk: upload.value!.files[0].slice(i, i + chunkSize),
       name: `${md5.value}-${i / chunkSize}.${suffix.value}`,
     })
-    if (chunks.value.length === chunksSize.value)
+    if (chunks.value.length === chunksNumber.value)
       onUpload()
   }
 }
@@ -45,19 +42,19 @@ function onUpload() {
       const res: any = await axios.post('http://localhost:8081/public/chunk', formData)
       if (res.data.code === 1) {
         percentCount.value += 1
-        percent.value = Math.floor((percentCount.value / chunksSize.value) * 100)
+        percent.value = Math.floor((percentCount.value / chunksNumber.value) * 100)
         chunks.value.splice(index, 1)
-        progressWidth.value += 100 / chunksSize.value * 3.2
+        progressWidth.value += 100 / chunksNumber.value * 3.2
       }
     }
     requestList.value.push(fn)
-    if (requestList.value.length === chunksSize.value)
+    if (requestList.value.length === chunksNumber.value)
       startRequest()
   })
 }
 
 async function startRequest() {
-  if (percentCount.value + 1 === chunksSize.value) {
+  if (percentCount.value + 1 === chunksNumber.value) {
     percent.value = 100
     progressWidth.value = 100 * 3.2
     axios.post('http://localhost:8081/public/merge', {
@@ -67,26 +64,13 @@ async function startRequest() {
     return
   }
   await requestList.value[percentCount.value]()
-  if (percentCount.value !== chunksSize.value)
+  if (percentCount.value !== chunksNumber.value)
     startRequest()
 }
 
 function clickUpload() {
   const input = document.querySelector<HTMLInputElement>('input[type="file"]')
   input!.dispatchEvent(new MouseEvent('click'))
-}
-
-function fileToBuffer(file: File) {
-  return new Promise((resolve, reject) => {
-    const fr = new FileReader()
-    fr.onload = (e) => {
-      resolve(e.target!.result)
-    }
-    fr.readAsArrayBuffer(file)
-    fr.onerror = () => {
-      reject(new Error('转换文件格式发生错误'))
-    }
-  })
 }
 </script>
 

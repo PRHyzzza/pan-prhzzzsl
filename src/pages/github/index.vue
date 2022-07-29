@@ -36,7 +36,7 @@ onMounted(() => {
   <div v-html="dom" />
 </template>
 
-<style scoped>
+<style>
 .ContributionCalendar {
   outline: 1px solid rgba(27, 31, 35, 0.06);
   outline-offset: -1px;

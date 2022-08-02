@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { createPopper } from '@popperjs/core'
+const { width } = useWindowSize()
 const dom = ref(null)
 const res = await axios('public/contributions')
 dom.value = res.data.data
@@ -8,17 +9,22 @@ onMounted(() => {
   rectDom.forEach((rect: SVGRectElement, index: number) => {
     // 添加hover事件
     rect.addEventListener('mouseenter', () => {
+      if (width.value < 823)
+        return
+      const placement = computed(() => {
+        return index < 14 ? 'top-start' : index > rectDom.length - 14 ? 'top-end' : 'top'
+      })
       const tooltip = document.createElement('div')
-      tooltip.className = index < 10 ? 'tooltip top-start' : index > rectDom.length - 10 ? 'tooltip top-end' : 'tooltip top'
+      tooltip.className = `tooltip ${placement.value}`
       tooltip.innerHTML = `${rect.getAttribute('data-date')}的活跃度为${rect.getAttribute('data-count')}`
       document.body.appendChild(tooltip)
       createPopper(rect, tooltip, {
-        placement: index < 10 ? 'top-start' : index > rectDom.length - 10 ? 'top-end' : 'top',
+        placement: placement.value,
         modifiers: [
           {
             name: 'offset',
             options: {
-              offset: index < 10 ? [-20, 8] : index > rectDom.length - 10 ? [20, 8] : [0, 8],
+              offset: index < 14 ? [-20, 8] : index > rectDom.length - 14 ? [20, 8] : [0, 8],
             },
           },
         ],
@@ -106,5 +112,11 @@ onMounted(() => {
 
 .tooltip.top::before {
   left: 50%;
+}
+
+@media screen and (max-width: 823px) {
+  .tooltip {
+    display: none;
+  }
 }
 </style>

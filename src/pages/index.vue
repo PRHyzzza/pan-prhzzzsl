@@ -8,6 +8,11 @@ const { t } = useI18n()
     <RouterLink to="/login">
       login
     </RouterLink>
+    <PanSwiper>
+      <div>1</div>
+      <div>2</div>
+      <div>3</div>
+    </PanSwiper>
   </div>
 </template>
 

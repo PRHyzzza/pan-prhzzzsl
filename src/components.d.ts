@@ -14,6 +14,7 @@ declare module '@vue/runtime-core' {
     PanFormItem: typeof import('./components/PanFormItem.vue')['default']
     PanInput: typeof import('./components/PanInput.vue')['default']
     PanModal: typeof import('./components/PanModal.vue')['default']
+    PanSwiper: typeof import('./components/PanSwiper.vue')['default']
     README: typeof import('./components/README.md')['default']
     Record: typeof import('./components/Record.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

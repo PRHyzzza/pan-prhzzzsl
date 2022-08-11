@@ -1,16 +1,44 @@
 <script setup lang="ts">
+const props = withDefaults(defineProps<{
+  auto?: boolean
+  duration?: number
+  direction?: 'horizontal' | 'vertical' | string
+  width?: number
+  height?: number
+  initialIndex?: number
+}>(), {
+  auto: true,
+  duration: 2500,
+  direction: 'horizontal',
+  width: 300,
+  height: 150,
+  initialIndex: 0,
+})
 const swiper = ref()
 const items = ref()
-const activeIndex = ref(0)
+const activeIndex = ref(props.initialIndex)
 const { proxy } = getCurrentInstance() as any
 const timer = ref()
 
+const child = ref({
+  width: props.width,
+  height: props.height,
+  direction: props.direction,
+})
+
+watch(props, () => {
+  child.value = {
+    width: props.width,
+    height: props.height,
+    direction: props.direction,
+  }
+})
+
+provide('swiper', child)
+
 onMounted(() => {
   updateItems()
-  timer.value = setInterval(() => {
-    activeIndex.value = (activeIndex.value + 1) % items.value.length
-    proxyPub()
-  }, 3000)
+  startTimer()
 })
 
 function updateItems() {
@@ -36,23 +64,44 @@ const throttledFn = useThrottleFn((index: number) => {
   handleIndicatorClick(index)
 }, 300)
 
+function startTimer() {
+  stopTimer()
+  if (props.auto) {
+    timer.value = setInterval(() => {
+      activeIndex.value = (activeIndex.value + 1) % items.value.length
+      proxyPub()
+    }, props.duration)
+  }
+}
+
+function stopTimer() {
+  if (timer.value)
+    clearInterval(timer.value)
+}
+
 onBeforeUnmount(() => {
-  clearInterval(timer.value)
+  stopTimer()
+  proxy.$unsub('pan.swiper.index')
 })
 </script>
 
 <template>
-  <div relative w-300px overflow-hidden>
-    <div ref="swiper" h-100px overflow-hidden>
+  <div
+    :style="`width:${width}px`" relative overflow-hidden
+    @mouseenter="stopTimer" @mouseleave="startTimer"
+  >
+    <div ref="swiper" :style="`height:${height}px`" overflow-hidden>
       <slot />
     </div>
 
-    <ul block absolute bottom-0 left-10 gap-8px>
+    <ul flex absolute bottom-2 left="50%" transform="translate-x--50%" gap-8px>
       <li
-        v-for="item, index in items" :key="item" :class="{
-          active: activeIndex === index,
-        }" inline-block w-30px h-6px bg-gray-300 opacity-50 mx-4px rounded-4px transition-opacity duration-300
-        @click.stop="handleIndicatorClick(index)" @mouseenter="throttledFn(index)"
+        v-for="item, index in items" :key="item"
+        :class="{ active: activeIndex === index }"
+        w-30px h-6px bg-gray-300 opacity-50
+        rounded-4px transition-opacity duration-300
+        @click.stop="handleIndicatorClick(index)"
+        @mouseenter="throttledFn(index)"
       />
     </ul>
   </div>

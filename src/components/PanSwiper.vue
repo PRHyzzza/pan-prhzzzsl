@@ -4,11 +4,12 @@ const items = ref()
 const activeIndex = ref(0)
 const { proxy } = getCurrentInstance() as any
 const timer = ref()
+
 onMounted(() => {
   updateItems()
   timer.value = setInterval(() => {
     activeIndex.value = (activeIndex.value + 1) % items.value.length
-    proxy.$pub('pan.swiper.index', activeIndex.value)
+    proxyPub()
   }, 3000)
 })
 
@@ -21,7 +22,14 @@ function updateItems() {
 
 function handleIndicatorClick(index: number) {
   activeIndex.value = index
-  proxy.$pub('pan.swiper.index', activeIndex.value)
+  proxyPub()
+}
+
+function proxyPub() {
+  proxy.$pub('pan.swiper.index', {
+    index: activeIndex.value,
+    size: items.value.length,
+  })
 }
 
 const throttledFn = useThrottleFn((index: number) => {

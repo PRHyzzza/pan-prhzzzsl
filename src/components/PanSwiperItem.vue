@@ -3,24 +3,22 @@ const props = defineProps<{
   itemKey: number
 }>()
 const activeIndex = ref(0)
-const oldIndex = ref(0)
+const size = ref()
 const { proxy } = getCurrentInstance() as any
-proxy.$sub('pan.swiper.index', (index: number[]) => {
-  oldIndex.value = activeIndex.value
-  activeIndex.value = index[0]
+proxy.$sub('pan.swiper.index', (index: { index: number; size: number }[]) => {
+  activeIndex.value = index[0].index
+  size.value = index[0].size
 })
+
 const show = computed(() => {
-  return activeIndex.value === props.itemKey - 1
-    ? {
-        transform: 'translateX(0)',
-      }
-    : oldIndex.value < activeIndex.value
-      ? {
-          transform: `translateX(-${100 - (activeIndex.value - props.itemKey + 1) * 300}px)`,
-        }
-      : {
-          transform: `translateX(${100 - (props.itemKey - activeIndex.value - 1) * 300}px)`,
-        }
+//   0 1 2 -1
+//   -1 0 1 2
+//   2 -1 0 1
+//   1 2 -1 0
+  return {
+    transform: `translateX(${Math.abs((props.itemKey - 1) - activeIndex.value) * 300}px)`,
+    transition: Math.abs((props.itemKey - 1) - activeIndex.value) === 0 ? 'transform .4s' : 'none',
+  }
 })
 onMounted(() => {
 
@@ -40,6 +38,6 @@ onMounted(() => {
   left: 0;
   height: 100%;
   overflow: hidden;
-  transition: all 1s ease-in-out;
+
 }
 </style>

@@ -9,9 +9,9 @@ const { t } = useI18n()
       login
     </RouterLink>
     <PanSwiper>
-      <div>1</div>
-      <div>2</div>
-      <div>3</div>
+      <PanSwiperItem v-for="item in 3" :key="item" bg-blue-300 w-300px :item-key="item">
+        {{ item }}
+      </PanSwiperItem>
     </PanSwiper>
   </div>
 </template>

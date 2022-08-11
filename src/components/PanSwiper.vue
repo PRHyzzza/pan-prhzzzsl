@@ -2,48 +2,56 @@
 const swiper = ref()
 const items = ref()
 const activeIndex = ref(0)
-
+const { proxy } = getCurrentInstance() as any
+const timer = ref()
 onMounted(() => {
   updateItems()
-  // setInterval(() => {
-  //   activeIndex.value = (activeIndex.value + 1) % items.value.length
-  // }, 1000)
+  timer.value = setInterval(() => {
+    activeIndex.value = (activeIndex.value + 1) % items.value.length
+    proxy.$pub('pan.swiper.index', activeIndex.value)
+  }, 3000)
 })
 
 function updateItems() {
   items.value = Array.from(swiper.value.children)
-  items.value = items.value.filter((item: { tagName: string }) => item.tagName === 'DIV')
+  items.value = items.value.filter((item: { className: string }) => item.className === 'swiper_item')
+  if (items.value.length === 0)
+    throw new Error('PanSwiper must have PanSwiperItem as children')
 }
 
 function handleIndicatorClick(index: number) {
   activeIndex.value = index
+  proxy.$pub('pan.swiper.index', activeIndex.value)
 }
 
 const throttledFn = useThrottleFn((index: number) => {
   handleIndicatorClick(index)
 }, 300)
+
+onBeforeUnmount(() => {
+  clearInterval(timer.value)
+})
 </script>
 
 <template>
-  <div ref="swiper" relative>
-    <slot />
+  <div relative w-300px overflow-hidden>
+    <div ref="swiper" h-100px overflow-hidden>
+      <slot />
+    </div>
+
     <ul block absolute bottom-0 left-10 gap-8px>
       <li
-        v-for="item, index in items" :key="item"
-        :class="{
+        v-for="item, index in items" :key="item" :class="{
           active: activeIndex === index,
-        }"
-        inline-block w-30px h-6px bg-gray-300 opacity-50
-        mx-4px rounded-4px transition-opacity duration-300
-        @click.stop="handleIndicatorClick(index)"
-        @mouseenter="throttledFn(index)"
+        }" inline-block w-30px h-6px bg-gray-300 opacity-50 mx-4px rounded-4px transition-opacity duration-300
+        @click.stop="handleIndicatorClick(index)" @mouseenter="throttledFn(index)"
       />
     </ul>
   </div>
 </template>
 
 <style scoped>
-.active{
+.active {
   opacity: 1;
 }
 </style>

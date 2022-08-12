@@ -98,8 +98,8 @@ onBeforeUnmount(() => {
       <li
         v-for="item, index in items" :key="item"
         :class="{ active: activeIndex === index }"
-        w-30px h-6px bg-gray-300 opacity-50
-        rounded-4px transition-opacity duration-300
+        w-12px h-6px bg-gray-300 opacity-60
+        rounded-full transition-opacity duration-300
         @click.stop="handleIndicatorClick(index)"
         @mouseenter="throttledFn(index)"
       />
@@ -109,6 +109,8 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .active {
-  opacity: 1;
+  --at-apply:
+  opacity-100
+  w-30px
 }
 </style>

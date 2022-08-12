@@ -15,15 +15,9 @@ proxy.$sub('pan.swiper.index', (index: { index: number; size: number }[]) => {
 })
 
 const show = computed(() => {
-  if (swiper.value.direction === 'horizontal') {
-    return {
-      transform: `translateX(${Math.abs((props.itemKey - 1) - activeIndex.value) * swiper.value.width}px)`,
-      transition: Math.abs((props.itemKey - 1) - activeIndex.value) === 0 ? 'transform .4s' : 'none',
-    }
-  }
   return {
-    transform: `translateY(${Math.abs((props.itemKey - 1) - activeIndex.value) * swiper.value.height}px)`,
-    transition: Math.abs((props.itemKey - 1) - activeIndex.value) === 0 ? 'transform .4s' : 'none',
+    transform: `translate${swiper.value.direction === 'horizontal' ? 'X' : 'Y'}(${(props.itemKey - 1 - activeIndex.value) * swiper.value.width}px)`,
+    transition: (props.itemKey - 1 - activeIndex.value) === 0 ? 'transform .4s' : 'none',
   }
 })
 </script>

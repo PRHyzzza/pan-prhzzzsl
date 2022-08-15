@@ -1,6 +1,6 @@
 <script setup lang='ts'>
-const route = useRoute()
-console.log(route)
+// const route = useRoute()
+// console.log(route)
 </script>
 
 <template>

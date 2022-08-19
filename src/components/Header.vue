@@ -1,11 +1,14 @@
 <script setup lang='ts'>
 // const route = useRoute()
 // console.log(route)
+const show = ref(false)
 </script>
 
 <template>
   <header flex flex-row justify-between items-center py-2 px-4>
-    <h1>Header</h1>
+    <h1 @click="show = !show">
+      Header
+    </h1>
     <div flex flex-row gap-2 text-sm>
       <div class="header_active">
         <router-link to="/">
@@ -23,7 +26,9 @@
       <a class="icon-btn text-xl" rel="noreferrer" href="https://github.com/PRHyzzza" target="_blank" title="GitHub">
         <div i-carbon-logo-github />
       </a>
-      <!-- <PanDrawer /> -->
+      <PanDrawer :show="show">
+        121
+      </PanDrawer>
     </div>
   </header>
 </template>

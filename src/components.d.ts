@@ -10,6 +10,7 @@ declare module '@vue/runtime-core' {
     Footer: typeof import('./components/Footer.vue')['default']
     Header: typeof import('./components/Header.vue')['default']
     PanCode: typeof import('./components/PanCode.vue')['default']
+    PanDrawer: typeof import('./components/PanDrawer.vue')['default']
     PanForm: typeof import('./components/PanForm.vue')['default']
     PanFormItem: typeof import('./components/PanFormItem.vue')['default']
     PanInput: typeof import('./components/PanInput.vue')['default']

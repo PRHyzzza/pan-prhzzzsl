@@ -11,7 +11,7 @@ const props = withDefaults(defineProps<{
 
 const emits = defineEmits(['handleClose', 'close'])
 
-const widthClass = computed(() => {
+const width = computed(() => {
   return { width: props.width }
 })
 
@@ -21,9 +21,7 @@ const handleMask = (): void => {
 }
 
 watch(() => props.show, (val: boolean) => {
-  val
-    ? document.body.style.overflow = 'hidden'
-    : document.body.style.overflow = 'auto'
+  document.body.style.overflow = val ? 'hidden' : 'auto'
   if (!val)
     emits('close')
 })
@@ -37,7 +35,7 @@ watch(() => props.show, (val: boolean) => {
         justify-center items-center bg="#000 opacity-50" @click="handleMask"
       >
         <div
-          :style="widthClass" flex flex-col gap-10px bg="white dark:#242424" dark:text-gray-100 min-w-300px min-h-20
+          :style="width" flex flex-col gap-10px bg="white dark:#242424" dark:text-gray-100 min-w-300px min-h-20
           rounded transition-all duration-500 shadow p="x30px y20px" @click.stop
         >
           <div font-medium flex flex-row justify-between items-center>

@@ -27,7 +27,7 @@ export const useSliceUpload = (size?: number) => {
   }
   // 获取文件的md5
   const getSpark = (buffer: ArrayBuffer): string => {
-    return spark.append(buffer).end()
+    return spark.hash(buffer)
   }
   // 获取文件切片数量
   const getChunksNumber = (buffer: ArrayBuffer): number => {

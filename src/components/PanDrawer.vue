@@ -16,7 +16,10 @@ const props = withDefaults(defineProps<{
 const emits = defineEmits(['handleClose', 'close'])
 
 const width = computed(() => {
-  return { width: props.width }
+  return {
+    'width': props.width,
+    '--drawer': props.direction === 'left' ? '-100%' : '100%',
+  }
 })
 
 const handleMask = (): void => {
@@ -34,62 +37,53 @@ watch(() => props.show, (val: boolean) => {
 <template>
   <Teleport to="body">
     <Transition name="drawer">
-      <div v-if="show" top-0 bottom-0 left-0 right-0 fixed hfull wfull transition-opacity duration-500 bg="#000 opacity-50" @click="handleMask">
-        <div relative hfull wfull @click.stop>
-          <div :class="`drawer-${direction}`" :style="width" bg="white dark:#242424" dark:text-gray-100 hfull shadow min-w-240px absolute p="x2rem y1.5rem">
-            <div flex flex-row justify-between items-center>
-              <h3>{{ title }}</h3>
-              <div i-carbon-close icon-btn text-2xl @click="$emit('handleClose')" />
-            </div>
-            <main>
-              <slot>
-                content
-              </slot>
-            </main>
+      <div v-if="show" top-0 bottom-0 left-0 right-0 fixed hfull wfull>
+        <div
+          class="drawer" :class="`drawer-${direction}`" :style="width" bg="white dark:#242424" dark:text-gray-100
+          hfull shadow min-w-240px absolute p="x8 y4"
+        >
+          <div flex flex-row justify-between items-center>
+            <h3>{{ title }}</h3>
+            <div i-carbon-close icon-btn text-2xl @click="$emit('handleClose')" />
           </div>
+          <main>
+            <slot>
+              content
+            </slot>
+          </main>
         </div>
+        <div h-full transition-opacity duration-500 bg="#000 opacity-50" @click.stop="handleMask" />
       </div>
     </Transition>
   </Teleport>
 </template>
 
 <style scoped>
-.drawer-left{
+.drawer-left {
   left: 0;
-  animation: drawer-left 0.5s;
 }
-.drawer-right{
+
+.drawer-right {
   right: 0;
-  animation: drawer-right 0.5s;
-}
-@keyframes drawer-left {
-  0%{
-    transform: translate(-100%, 0)
-  }
-
-  100% {
-    transform: translate(0, 0)
-  }
-}
-@keyframes drawer-right {
-  0%{
-    transform: translate(100%, 0)
-  }
-
-  100% {
-    transform: translate(0, 0)
-  }
-}
-.drawer-enter-from {
-  opacity: 0;
 }
 
+.drawer-enter-active,
+.drawer-leave-active {
+  transition: opacity 0.5s ease-in-out;
+}
+
+.drawer-enter-from,
 .drawer-leave-to {
   opacity: 0;
 }
 
-.drawer-enter-from .drawer-container,
-.drawer-leave-to .drawer-container {
-  opacity: 1;
+.drawer-enter-active .drawer,
+.drawer-leave-active .drawer {
+  transition: transform 0.5s ease-in-out;
+}
+
+.drawer-enter-from .drawer,
+.drawer-leave-to .drawer {
+  transform: translate(var(--drawer), 0);
 }
 </style>

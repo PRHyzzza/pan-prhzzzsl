@@ -5,11 +5,11 @@ const show = ref(false)
 </script>
 
 <template>
-  <header flex flex-row justify-between items-center py-2 px-4>
-    <h1 @click="show = !show">
+  <header flex flex-row justify-between items-center p="2 sm:x-4">
+    <h1>
       Header
     </h1>
-    <div flex flex-row gap-2 text-sm>
+    <div hidden sm:flex flex-row gap-2 text-sm>
       <div class="header_active">
         <router-link to="/">
           Home
@@ -26,10 +26,11 @@ const show = ref(false)
       <a class="icon-btn text-xl" rel="noreferrer" href="https://github.com/PRHyzzza" target="_blank" title="GitHub">
         <div i-carbon-logo-github />
       </a>
-      <PanDrawer :show="show">
-        121
-      </PanDrawer>
     </div>
+    <button sm:hidden i-carbon:menu text-xl @click="show = true" />
+    <PanDrawer :show="show" :is-mask="true" @close="show = false" @handle-close="show = false">
+      121
+    </PanDrawer>
   </header>
 </template>
 

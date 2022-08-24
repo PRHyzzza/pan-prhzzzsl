@@ -1,7 +1,17 @@
 <script setup lang='ts'>
-// const route = useRoute()
-// console.log(route)
+const route = useRoute()
+const { t } = useI18n()
 const show = ref(false)
+const menuList = ref([
+  {
+    name: 'home',
+    url: '/',
+  },
+  {
+    name: 'about',
+    url: '/about',
+  },
+])
 </script>
 
 <template>
@@ -9,15 +19,10 @@ const show = ref(false)
     <h1>
       Header
     </h1>
-    <div hidden sm:flex flex-row gap-2 text-sm>
-      <div class="header_active">
-        <router-link to="/">
-          Home
-        </router-link>
-      </div>
-      <div>
-        <router-link to="/about">
-          About
+    <div hidden sm:flex flex-row gap-4 text-sm>
+      <div v-for="item in menuList" :key="item.url" :class="{ header_active: route.path === item.url }" hover="text-teal-600">
+        <router-link :to="item.url">
+          {{ t(`button.${item.name}`) }}
         </router-link>
       </div>
       <button class="icon-btn !outline-none text-xl" title="切换主题" @click="toggleDark()">
@@ -28,7 +33,7 @@ const show = ref(false)
       </a>
     </div>
     <button sm:hidden i-carbon:menu text-xl @click="show = true" />
-    <PanDrawer :show="show" :is-mask="true" @close="show = false" @handle-close="show = false">
+    <PanDrawer :show="show" @close="show = false" @handle-close="show = false">
       121
     </PanDrawer>
   </header>

@@ -14,6 +14,7 @@ const direction = ref('horizontal')
         {{ item }}
       </PanSwiperItem>
     </PanSwiper>
+    <PanUpload />
   </div>
 </template>
 

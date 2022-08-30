@@ -3,27 +3,46 @@ const props = withDefaults(defineProps<{
   multiple?: boolean
   accept?: string | undefined
   size?: number
+  chunk?: boolean
 }>(), {
   multiple: true,
+  chunk: false,
 })
-const emits = defineEmits(['onChange'])
+const emits = defineEmits<{
+  (e: 'change', list: UpLoadList[] | FileList | null): void
+}>()
+
 const {
   fileToBuffer,
   getHash,
   getChunks,
 } = useSliceUpload(props.size)
+
 const { files, open } = useFileDialog({
   multiple: props.multiple,
   accept: props.accept,
 })
+
+const list = ref<UpLoadList[]>([])
+
 watch(files, async (newFiles) => {
-  emits('onChange', newFiles)
-  for (const file of newFiles!) {
-    const buffer = await fileToBuffer(file) as ArrayBuffer
-    const md5 = getHash(buffer)
-    const chunks = getChunks(buffer, file)
-    console.log(md5, chunks)
+  if (props.chunk) {
+    for (const file of newFiles!) {
+      const buffer = await fileToBuffer(file) as ArrayBuffer
+      const hash = getHash(buffer)
+      const chunks = getChunks(buffer, file)
+      list.value.push({
+        chunks,
+        total: chunks.length,
+        hash,
+        size: file.size,
+        name: file.name,
+        type: file.type,
+      })
+    }
   }
+
+  emits('change', props.chunk ? list.value : files.value)
 })
 const num = ref(0)
 const width = computed(() => {
@@ -32,9 +51,9 @@ const width = computed(() => {
 </script>
 
 <template>
-  <button btn type="button" @click="open()">
-    上传文件
-  </button>
+  <div @click="open()">
+    <slot />
+  </div>
   <template v-if="files">
     <li
       v-for="file of files" :key="file.name" class="file-item" max-w-300px flex flex-row justify-between items-center

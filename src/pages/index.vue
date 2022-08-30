@@ -1,6 +1,9 @@
 <script setup lang="ts">
 const { t } = useI18n()
 const direction = ref('horizontal')
+const up = (aa: UpLoadList[] | FileList) => {
+  console.log(aa)
+}
 </script>
 
 <template>
@@ -14,7 +17,11 @@ const direction = ref('horizontal')
         {{ item }}
       </PanSwiperItem>
     </PanSwiper>
-    <PanUpload />
+    <PanUpload chunk @change="up">
+      <button btn>
+        上传
+      </button>
+    </PanUpload>
   </div>
 </template>
 

@@ -21,10 +21,6 @@ export const useSliceUpload = (size?: number) => {
     return SparkMD5.ArrayBuffer.hash(buffer)
   }
 
-  const getTotal = (buffer: ArrayBuffer): number => {
-    return Math.ceil(buffer.byteLength / chunkSize.value)
-  }
-
   const getChunks = (buffer: ArrayBuffer, file: File) => {
     const chunks: Blob[] = []
     for (let i = 0; i < buffer.byteLength; i += chunkSize.value)
@@ -35,7 +31,6 @@ export const useSliceUpload = (size?: number) => {
   return {
     fileToBuffer,
     getHash,
-    getTotal,
     getChunks,
   }
 }

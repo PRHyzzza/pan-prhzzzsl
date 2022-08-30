@@ -2,25 +2,33 @@
 const props = withDefaults(defineProps<{
   multiple?: boolean
   accept?: string | undefined
+  size?: number
 }>(), {
   multiple: true,
 })
 const emits = defineEmits(['onChange'])
+const {
+  fileToBuffer,
+  getHash,
+  getChunks,
+} = useSliceUpload(props.size)
 const { files, open } = useFileDialog({
   multiple: props.multiple,
   accept: props.accept,
 })
 watch(files, async (newFiles) => {
   emits('onChange', newFiles)
+  for (const file of newFiles!) {
+    const buffer = await fileToBuffer(file) as ArrayBuffer
+    const md5 = getHash(buffer)
+    const chunks = getChunks(buffer, file)
+    console.log(md5, chunks)
+  }
 })
 const num = ref(0)
 const width = computed(() => {
   return { '--item-width': `${num.value / 10 * 100}%` }
 })
-setInterval(() => {
-  if (num.value < 10)
-    num.value++
-}, 3000)
 </script>
 
 <template>

@@ -20,6 +20,9 @@
       "vite-plugin-pages/client",
       "vite-plugin-vue-layouts/client"
     ],
+    "typeRoots": [
+      "./types"
+    ],
     "paths": {
       "~/*": ["src/*"]
     }

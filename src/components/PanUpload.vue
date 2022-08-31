@@ -8,6 +8,7 @@ const props = withDefaults(defineProps<{
   multiple: true,
   chunk: false,
 })
+
 const emits = defineEmits<{
   (e: 'change', list: UpLoadList[] | FileList | null): void
 }>()
@@ -25,22 +26,25 @@ const { files, open } = useFileDialog({
 
 const list = ref<UpLoadList[]>([])
 
-watch(files, async (newFiles) => {
-  if (props.chunk) {
-    for (const file of newFiles!) {
-      const buffer = await fileToBuffer(file) as ArrayBuffer
-      const hash = getHash(buffer)
-      const chunks = getChunks(buffer, file)
-      list.value.push({
-        chunks,
-        total: chunks.length,
-        hash,
-        size: file.size,
-        name: file.name,
-        type: file.type,
-      })
-    }
+const chunkFiles = async () => {
+  for (const file of files.value!) {
+    const buffer = await fileToBuffer(file) as ArrayBuffer
+    const hash = getHash(buffer)
+    const chunks = getChunks(buffer, file)
+    list.value.push({
+      chunks,
+      total: chunks.length,
+      hash,
+      size: file.size,
+      name: file.name,
+      type: file.type,
+    })
   }
+}
+
+watch(files, () => {
+  if (props.chunk)
+    chunkFiles()
 
   emits('change', props.chunk ? list.value : files.value)
 })

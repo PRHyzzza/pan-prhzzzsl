@@ -9,10 +9,7 @@ const props = withDefaults(defineProps<{
   chunk: false,
 })
 
-const emits = defineEmits<{
-  (e: 'change', list: UpLoadList[] | FileList | null): void
-}>()
-
+const emits = defineEmits(['change'])
 const {
   fileToBuffer,
   getHash,
@@ -42,11 +39,11 @@ const chunkFiles = async () => {
   }
 }
 
-watch(files, () => {
+watch(files, async () => {
   if (props.chunk)
-    chunkFiles()
+    await chunkFiles()
 
-  emits('change', props.chunk ? list.value : files.value)
+  emits('change', props.chunk ? list : files)
 })
 const num = ref(0)
 const width = computed(() => {

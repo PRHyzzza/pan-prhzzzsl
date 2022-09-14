@@ -41,6 +41,7 @@ const upload = async (files: Ref<UpLoadList[]>) => {
         上传
       </button>
     </PanUpload>
+    <PanProgress />
   </div>
 </template>
 

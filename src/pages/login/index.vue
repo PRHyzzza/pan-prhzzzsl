@@ -61,7 +61,7 @@ onMounted(() => {
         register
       </div>
     </Transition>
-    <PanModal :show="show" @handle-close="show = false" @close="fu" />
+    <PanModal :show="show" location="bottom-right" @handle-close="show = false" @close="fu" />
     <div btn @click="show = true">
       跳出
     </div>

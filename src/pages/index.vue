@@ -23,6 +23,10 @@ const upload = async (files: Ref<UpLoadList[]>) => {
   for await (const fun of funs.value)
     await fun()
 }
+const progress = ref(20)
+setInterval(() => {
+  progress.value++
+}, 1000)
 </script>
 
 <template>
@@ -41,7 +45,7 @@ const upload = async (files: Ref<UpLoadList[]>) => {
         上传
       </button>
     </PanUpload>
-    <PanProgress />
+    <PanProgress v-model="progress" text="进度条" />
   </div>
 </template>
 

@@ -2,7 +2,7 @@
 import type { Ref } from 'vue'
 const { t } = useI18n()
 const direction = ref('horizontal')
-const funs = ref<any[]>([])
+const funs = ref<Function[]>([])
 const upload = async (files: Ref<UpLoadList[]>) => {
   files.value.forEach((item) => {
     item.chunks.forEach((items, index) => {

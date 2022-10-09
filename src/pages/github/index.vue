@@ -49,23 +49,28 @@ onMounted(() => {
 }
 
 .ContributionCalendar-day[data-level="0"] {
-  fill: #eff6ff;
+  --at-apply:
+  fill-blue-50
 }
 
 .ContributionCalendar-day[data-level="1"] {
-  fill: #bfdbfe;
+  --at-apply:
+  fill-blue-300
 }
 
 .ContributionCalendar-day[data-level="2"] {
-  fill: #60a5fa;
+  --at-apply:
+  fill-blue-500
 }
 
 .ContributionCalendar-day[data-level="3"] {
-  fill: #2563eb;
+  --at-apply:
+  fill-blue-700
 }
 
 .ContributionCalendar-day[data-level="4"] {
-  fill: #1e3a8a;
+  --at-apply:
+  fill-blue-900
 }
 
 .ContributionCalendar-label {

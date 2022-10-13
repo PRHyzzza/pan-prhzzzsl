@@ -1,6 +1,4 @@
-import type { AxiosPromise } from 'axios'
-
-export const uploadFile = (formData: FormData): AxiosPromise<any> => {
+export const uploadFile = (formData: FormData) => {
   return axios({
     method: 'post',
     url: 'public/upload/file',

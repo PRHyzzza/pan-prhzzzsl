@@ -5,8 +5,6 @@ const loginRef = ref()
 const loginForm = ref<login>({
   userCode: '',
   password: '',
-  code: '',
-  nonceStr: '',
 })
 
 const loginRules = {
@@ -20,7 +18,7 @@ const loginRules = {
     { min: 3, message: '密码最少3位' },
     { max: 10, message: '密码最多10位' },
   ],
-  code: [
+  captcha: [
     { required: true, message: '请输入验证码' },
     { min: 4, message: '请输入验证码' },
   ],
@@ -57,8 +55,8 @@ onMounted(() => {
           <PanFormItem lable="密码" prop="password">
             <PanInput v-model="loginForm.password" w240px form placeholder="请输入密码" />
           </PanFormItem>
-          <PanFormItem lable="验证码" prop="code">
-            <PanCode v-model="loginForm.code" form :code-num="4" />
+          <PanFormItem lable="验证码" prop="captcha">
+            <PanCode v-model="loginForm.captcha" form :code-num="4" />
             <img w80px ml-4 cursor-pointer :src="captcha" @click="getCaptcha()">
           </PanFormItem>
           <button btn @click="bindLogin">

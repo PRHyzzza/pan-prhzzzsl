@@ -1,6 +1,6 @@
 interface login{
   userCode:string,
   password: string,
-  code: string,
+  captcha?: string,
   nonceStr?: string,
 }

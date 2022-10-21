@@ -9,8 +9,10 @@ useHead({
     },
   ],
 })
-const { saveUserInfo } = useUserStore()
-saveUserInfo('111')
+onMounted(() => {
+  const { saveUserInfo } = useUserStore()
+  saveUserInfo('111')
+})
 </script>
 
 <template>

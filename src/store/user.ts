@@ -14,17 +14,7 @@ export const useUserStore = defineStore('user', () => {
     saveUserInfo,
   }
 }, {
-  persist: {
-    enabled: true,
-    strategies: [
-      {
-        // 自定义key
-        key: 'user',
-        // 自定义存储方式，默认sessionStorage
-        storage: localStorage,
-      },
-    ],
-  },
+  persist: true,
 })
 
 if (import.meta.hot)

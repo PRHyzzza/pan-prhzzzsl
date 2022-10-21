@@ -21,6 +21,7 @@
     "nprogress": "^0.2.0",
     "pinia": "^2.0.22",
     "pinia-plugin-persist": "^1.0.0",
+    "pinia-plugin-persistedstate": "^2.3.0",
     "prism-theme-vars": "^0.2.3",
     "prismjs": "^1.28.0",
     "spark-md5": "^3.0.2",

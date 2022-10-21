@@ -9,6 +9,8 @@ useHead({
     },
   ],
 })
+const { saveUserInfo } = useUserStore()
+saveUserInfo('111')
 </script>
 
 <template>

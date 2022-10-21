@@ -5,19 +5,19 @@ const props = defineProps<{
   itemKey: number
 }>()
 const activeIndex = ref(0)
-const size = ref()
 const { proxy } = getCurrentInstance() as any
 const swiper = inject('swiper') as Ref<{ width: number; height: number; direction: 'horizontal' | 'vertical' }>
 
-proxy.$sub('pan.swiper.index', (index: { index: number; size: number }[]) => {
-  activeIndex.value = index[0].index
-  size.value = index[0].size
+proxy.$sub('pan.swiper.index', (index: { index: number }[]) => {
+  activeIndex.value = index[0].index + 1
+  console.log(activeIndex.value)
 })
 
 const show = computed(() => {
   return {
-    transform: `translate${swiper.value.direction === 'horizontal' ? 'X' : 'Y'}(${(props.itemKey - 1 - activeIndex.value) * swiper.value.width}px)`,
-    transition: (props.itemKey - 1 - activeIndex.value) === 0 ? 'transform .4s' : 'none',
+    transform: `translate${swiper.value.direction === 'horizontal' ? 'X' : 'Y'}
+    (${(props.itemKey === activeIndex.value ? 0 : props.itemKey < activeIndex.value ? -1 : 1) * swiper.value.width}px)`,
+    transition: 'transform .4s',
   }
 })
 </script>

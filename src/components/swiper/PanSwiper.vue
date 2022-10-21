@@ -12,11 +12,10 @@ const props = withDefaults(defineProps<{
   direction: 'horizontal',
   width: 300,
   height: 150,
-  initialIndex: 0,
 })
 const swiper = ref()
 const items = ref()
-const activeIndex = ref(props.initialIndex)
+const activeIndex = ref(0)
 const { proxy } = getCurrentInstance() as any
 const timer = ref()
 
@@ -56,7 +55,6 @@ function handleIndicatorClick(index: number) {
 function proxyPub() {
   proxy.$pub('pan.swiper.index', {
     index: activeIndex.value,
-    size: items.value.length,
   })
 }
 
@@ -79,6 +77,9 @@ function stopTimer() {
     clearInterval(timer.value)
 }
 
+onMounted(() => {
+  proxyPub()
+})
 onBeforeUnmount(() => {
   stopTimer()
   proxy.$unsub('pan.swiper.index')

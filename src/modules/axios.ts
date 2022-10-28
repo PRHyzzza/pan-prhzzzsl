@@ -5,14 +5,18 @@ export const install: UserModule = ({ router }) => {
   axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL
 
   const errorHandler = (error: AxiosError) => {
-    if (error.response)
-      console.log(error.response.statusText || '请求错误')
+    if (error.response && error.response?.status === 401)
+      router.push('/login')
+    else
+      console.log('网络繁忙')
     return Promise.reject(error)
   }
 
   axios.interceptors.request.use((config: AxiosRequestConfig) => {
     config.headers = config.headers || {}
     config.headers.service = 'pan'
+    const { userInfo } = useUserStore()
+    config.headers.token = userInfo?.token || ''
     return config
   }, errorHandler)
 
@@ -24,11 +28,12 @@ export const install: UserModule = ({ router }) => {
       if (res.code === 1) {
         return res
       }
-      else if (res.code === 401) {
-        router.push('/login')
+      else if (res.code === 0) {
+        console.log('警告')
         return res
       }
       else {
+        console.log('错误')
         return res
       }
     }

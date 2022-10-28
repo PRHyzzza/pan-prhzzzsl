@@ -10,7 +10,6 @@ const swiper = inject('swiper') as Ref<{ width: number; height: number; directio
 
 proxy.$sub('pan.swiper.index', (index: { index: number }[]) => {
   activeIndex.value = index[0].index + 1
-  console.log(activeIndex.value)
 })
 
 const show = computed(() => {

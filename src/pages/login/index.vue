@@ -2,6 +2,7 @@
 const isSwitch = ref<boolean>(true)
 const captcha = ref<string>()
 const loginRef = ref()
+const { saveUserInfo } = useUserStore()
 const loginForm = ref<login>({
   userCode: '',
   password: '',
@@ -32,10 +33,15 @@ const getCaptcha = () => {
 const bindLogin = () => {
   loginRef.value.validate().then(async () => {
     const res: any = await wwwLogin(loginForm.value)
-    if (res.code === 1)
-      console.log(res.data)
-  }).catch((err: any) => {
-    console.log(err)
+    if (res.code === 1) {
+      saveUserInfo(res.data)
+    }
+    else {
+      getCaptcha()
+      console.error('登录失败')
+    }
+  }).catch(() => {
+    console.warn('请输入账号密码')
   })
 }
 
@@ -53,10 +59,10 @@ onMounted(() => {
             <PanInput v-model="loginForm.userCode" w240px form placeholder="请输入用户名" />
           </PanFormItem>
           <PanFormItem lable="密码" prop="password">
-            <PanInput v-model="loginForm.password" w240px form placeholder="请输入密码" />
+            <PanInput v-model="loginForm.password" w240px form placeholder="请输入密码" type="password" />
           </PanFormItem>
           <PanFormItem lable="验证码" prop="captcha">
-            <PanCode v-model="loginForm.captcha" form :code-num="4" />
+            <PanInput v-model="loginForm.captcha" w160px form placeholder="请输入验证码" />
             <img w80px ml-4 cursor-pointer :src="captcha" @click="getCaptcha()">
           </PanFormItem>
           <button btn @click="bindLogin">

@@ -4,9 +4,9 @@ export const useUserStore = defineStore('user', () => {
   /**
    * 储存用户信息
    */
-  const userInfo = ref('')
+  const userInfo = ref<userInfo>()
 
-  const saveUserInfo = (user: string) => {
+  const saveUserInfo = (user: userInfo) => {
     userInfo.value = user
   }
   return {

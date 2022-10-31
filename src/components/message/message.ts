@@ -9,7 +9,7 @@ const renderMessage = (vnode: any, duration = 3000) => {
   attr.value = 'message'
   messageNode.setAttributeNode(attr)
   const height = 54 // 单个消息框高度
-  const messageList = document.getElementsByClassName('message')
+  const messageList = document.querySelectorAll('.message')
   messageNode.style.top = `${messageList.length * height}px`
   document.body.appendChild(messageNode)
   render(vnode, messageNode)

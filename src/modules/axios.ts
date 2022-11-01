@@ -8,7 +8,7 @@ export const install: UserModule = ({ router }) => {
     if (error.response && error.response?.status === 401)
       router.push('/login')
     else
-      console.log('网络繁忙')
+      message.error('网络繁忙')
     return Promise.reject(error)
   }
 
@@ -29,11 +29,11 @@ export const install: UserModule = ({ router }) => {
         return res
       }
       else if (res.code === 0) {
-        console.log('警告')
+        message.warn(res.msg)
         return res
       }
       else {
-        console.log('错误')
+        message.error(res.msg)
         return res
       }
     }

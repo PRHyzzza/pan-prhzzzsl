@@ -36,7 +36,7 @@ export default {
     renderMessage(vnode, duration)
   },
   info: (text: string, duration?: number) => {
-    const vnode = createVNode(Message, { type: 'info', text, duration })
+    const vnode = createVNode(Message, { text, duration })
     renderMessage(vnode, duration)
   },
 }

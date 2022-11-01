@@ -104,6 +104,6 @@ onOpen()
 
 .message-icon {
   --at-apply:
-    inline-block box-border vertical-middle mt--3px mr-6px font-400 text-18px
+    inline-block box-border vertical-middle mt--3px mr-6px font-400 text-1rem
 }
 </style>

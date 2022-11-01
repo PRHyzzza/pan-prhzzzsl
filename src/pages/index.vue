@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Ref } from 'vue'
-import message from '~/components/message/message'
+
 const { t } = useI18n()
 const direction = ref('horizontal')
 const funs = ref<Function[]>([])
@@ -24,13 +24,6 @@ const upload = async (files: Ref<UpLoadList[]>) => {
   for await (const fun of funs.value)
     await fun()
 }
-message.success('1222')
-message.info('1222')
-message.error('1222')
-const progress = ref(20)
-setInterval(() => {
-  progress.value++
-}, 1000)
 </script>
 
 <template>
@@ -49,7 +42,6 @@ setInterval(() => {
         上传
       </button>
     </PanUpload>
-    <PanProgress v-model="progress" text="进度条" />
   </div>
 </template>
 

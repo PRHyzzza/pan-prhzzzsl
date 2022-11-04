@@ -2,6 +2,7 @@
 const isSwitch = ref<boolean>(true)
 const captcha = ref<string>()
 const loginRef = ref()
+const router = useRouter()
 const { saveUserInfo } = useUserStore()
 const loginForm = ref<login>({
   userCode: '',
@@ -33,12 +34,15 @@ const getCaptcha = () => {
 const bindLogin = () => {
   loginRef.value.validate().then(async () => {
     const res: any = await wwwLogin(loginForm.value)
-    if (res.code === 1)
+    if (res.code === 1) {
       saveUserInfo(res.data)
-    else
+      router.push('/')
+    }
+    else {
       getCaptcha()
+    }
   }).catch(() => {
-    console.warn('请输入账号密码')
+    console.warn('请输入登录信息')
   })
 }
 

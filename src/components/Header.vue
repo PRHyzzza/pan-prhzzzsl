@@ -2,6 +2,7 @@
 const route = useRoute()
 const { t } = useI18n()
 const show = ref(false)
+const { userInfo } = useUserStore()
 const menuList = ref([
   {
     name: 'home',
@@ -19,7 +20,7 @@ const menuList = ref([
     <h1>
       Header
     </h1>
-    <div hidden sm:flex flex-row gap-4 text-sm>
+    <div hidden sm:flex flex-row gap-4 text-sm items-center>
       <div v-for="item in menuList" :key="item.url" :class="{ header_active: route.path === item.url }" hover="text-teal-600">
         <router-link :to="item.url">
           {{ t(`button.${item.name}`) }}
@@ -31,6 +32,12 @@ const menuList = ref([
       <a class="icon-btn text-xl" rel="noreferrer" href="https://github.com/PRHyzzza" target="_blank" title="GitHub">
         <div i-carbon-logo-github />
       </a>
+      <template v-if="userInfo">
+        <img :src="userInfo.avatar">
+      </template>
+      <RouterLink v-else to="/login" hover="text-teal-600">
+        登录
+      </RouterLink>
     </div>
     <button sm:hidden i-carbon:menu text-xl @click="show = true" />
     <PanDrawer :show="show" @close="show = false" @handle-close="show = false">

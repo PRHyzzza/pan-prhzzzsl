@@ -2,7 +2,8 @@
 const route = useRoute()
 const { t } = useI18n()
 const show = ref(false)
-const { userInfo } = useUserStore()
+const { userInfo } = storeToRefs(useUserStore())
+
 const menuList = ref([
   {
     name: 'home',
@@ -21,7 +22,10 @@ const menuList = ref([
       Header
     </h1>
     <div hidden sm:flex flex-row gap-4 text-sm items-center>
-      <div v-for="item in menuList" :key="item.url" :class="{ header_active: route.path === item.url }" hover="text-teal-600">
+      <div
+        v-for="item in menuList" :key="item.url" :class="{ header_active: route.path === item.url }"
+        hover="text-teal-600"
+      >
         <router-link :to="item.url">
           {{ t(`button.${item.name}`) }}
         </router-link>
@@ -33,9 +37,12 @@ const menuList = ref([
         <div i-carbon-logo-github />
       </a>
       <template v-if="userInfo">
-        <img :src="userInfo.avatar">
+        <img :src="userInfo.avatar" w24px h24px>
+        <button btn py1 px3 text-3 @click="useUserStore().loginOut">
+          退出
+        </button>
       </template>
-      <RouterLink v-else to="/login" hover="text-teal-600">
+      <RouterLink v-else to="/login" btn py1 px3 text-3>
         登录
       </RouterLink>
     </div>

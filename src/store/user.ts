@@ -10,9 +10,14 @@ export const useUserStore = defineStore('user', () => {
     userInfo.value = user
   }
 
+  const loginOut = () => {
+    userInfo.value = undefined
+  }
+
   return {
     userInfo,
     saveUserInfo,
+    loginOut,
   }
 }, {
   persist: true,

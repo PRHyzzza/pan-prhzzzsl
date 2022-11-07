@@ -55,6 +55,7 @@ export default defineConfig(({ command, mode }) => {
           'vue/macros',
           '@vueuse/head',
           '@vueuse/core',
+          'pinia',
           {
             axios: [
               ['default', 'axios']

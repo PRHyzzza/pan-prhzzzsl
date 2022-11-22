@@ -27,8 +27,8 @@ const style = computed(() => {
 </script>
 
 <template>
-  <div class="progress" relative flex row rounded shadow transition-transform p="y1 x2" :style="style">
-    <div v-if="text" v-text="text" />
+  <div class="progress" relative flex row rounded shadow transition-transform bg-gray-100 dark:bg-gray-300 p="y1 x2" :style="style">
+    <div v-if="text" z-10 v-text="text" />
     <slot />
   </div>
 </template>
@@ -37,7 +37,7 @@ const style = computed(() => {
   .progress::before{
     width: var(--width);
     background: var(--bg-color);
-    z-index: -1;
+    z-index: 1;
     content:"";
     --at-apply:
     rounded

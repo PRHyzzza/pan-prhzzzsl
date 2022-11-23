@@ -1,11 +1,16 @@
 <script setup lang="ts">
 import { createPopper } from '@popperjs/core'
 const { width } = useWindowSize()
-const dom = ref(null)
-const res = await axios('public/contributions')
-dom.value = res.data.data
-onMounted(() => {
+const dom = ref()
+
+onMounted(async () => {
+  const res = await axios('public/contributions')
+  dom.value = res.data
   const rectDom: NodeListOf<SVGRectElement> = document.querySelectorAll('rect')
+  if (rectDom.length === 0) {
+    dom.value = '网络错误'
+    return
+  }
   rectDom.forEach((rect: SVGRectElement, index: number) => {
     // 添加hover事件
     rect.addEventListener('mouseenter', () => {

@@ -6,9 +6,9 @@ interface login {
 }
 
 interface userInfo {
-  userCode: string,
-  uty: number,
-  token: string,
-  userName: string,
-  avatar: string
+  userCode?: string,
+  uty?: number,
+  token?: string,
+  userName?: string,
+  avatar?: string
 }

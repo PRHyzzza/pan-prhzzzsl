@@ -36,7 +36,7 @@ const menuList = ref([
       <a class="icon-btn text-xl" rel="noreferrer" href="https://github.com/PRHyzzza" target="_blank" title="GitHub">
         <div i-carbon-logo-github />
       </a>
-      <template v-if="userInfo">
+      <template v-if="userInfo?.token">
         <img :src="userInfo.avatar" w24px h24px>
         <button btn py1 px3 text-3 @click="useUserStore().loginOut">
           退出
